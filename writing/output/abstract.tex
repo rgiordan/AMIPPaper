@@ -1,0 +1,32 @@
+% Study samples often differ from the target populations of inference and policy
+% decisions in non-random ways.  Researchers typically believe that such
+% departures from random sampling --- due to changes in the population over time and
+% space, or difficulties in sampling truly randomly --- are small, and their
+% corresponding impact on the inference should be small as well.  We might
+% therefore be concerned if the conclusions of our studies are excessively
+% sensitive to a very small proportion of our sample data.  We propose a method to
+% assess the sensitivity of applied econometric conclusions to the removal of a
+% small fraction of the sample.  Manually checking the influence of all possible
+% small subsets is computationally infeasible, so we use an approximation to find
+% the most influential subset.  Our metric, the ``Approximate Maximum Influence
+% Perturbation,'' is based on the classical influence function, and is
+% automatically computable for common methods including (but not limited to) OLS,
+% IV, MLE, GMM, and variational Bayes.   We provide finite-sample error bounds on
+% approximation performance.   At minimal extra cost, we provide an exact
+% finite-sample lower bound on sensitivity.   We find that sensitivity is driven
+% by a signal-to-noise ratio in the inference problem, is not reflected in
+% standard errors, does not disappear asymptotically, and is not due to
+% misspecification. While some empirical applications are robust, results of
+% several influential economics papers can be overturned by removing less than 1\%
+% of the sample.
+
+% AER abstracts must be < 100 words
+Study samples often differ from the target populations in non-random ways, so it
+is important to assess whether small changes in the population would lead to
+large changes in substantive conclusions. We propose a method to approximately
+assess the sensitivity of empirical results to the removal of a small fraction
+of the sample.  We show that such sensitivity is not reflected in standard
+errors, does not disappear asymptotically, and is not due to misspecification.
+Our method is automatically computable for many common estimators, and we show
+that several influential economics studies are highly sensitive to small subsets
+of their data.

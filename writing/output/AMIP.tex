@@ -1,0 +1,192 @@
+Our approximation to the Maximum Influence Perturbation and its related
+quantities, the Most Influential Set and Perturbation Inducing Proportion,
+centers on a first-order Taylor expansion in $\w \mapsto
+\thetafun(\thetahat(\w), \w)$ around $\w = \onevec$.  Let $\thetafunhat :=
+\thetafun(\thetahat(\onevec), \onevec)$, the quantity of interest at the
+original dataset.  Then:
+%
+\begin{align} \eqlabel{taylor_approx}
+	\thetafun(\thetahat(\w), \w)
+		&\approx \thetafunlin(\w)
+		:= \thetafunhat +
+            \sumn (w_n - 1) \infl_n,
+    \textrm{ with } \infl_n :=
+        \fracat{\partial \thetafun(\thetahat(\w), \w)}
+               {\partial w_n}{\w = \onevec}.
+\end{align}
+%
+We can in turn approximate the Most Influential Set as follows.  Let
+$\infl_{(n)}$ denote the order statistics of $\infl_n$, i.e., the $\infl_n$
+sorted from most negative to most positive.  Let $\ind{\cdot}$ denote the
+indicator function taking value $0$ when the argument is false and $1$ when
+true.  Then
+%
+\begin{align}
+	\w^{**}  \approx
+    \w^*
+			:={}& \argmax_{\w \in W_\alpha}
+   				 \left( \thetafunlin(\w) - \thetafunhat \right)
+            %\nonumber\\&
+			% = \argmax_{\w \in W_\alpha} \sumn (w_n - 1) \infl_n
+			= \argmax_{\w \in W_\alpha} \sum_{n: \, w_n = 0} \left(- \infl_n\right)
+            \Rightarrow \nonumber
+\\
+\thetafunlin(\w^*) - \thetafunhat
+    ={}& -\sum_{n=1}^{\lfloor \alpha N \rfloor} \infl_{(n)}
+        \ind{\infl_{(n)} < 0}. \eqlabel{w_approx_opt}
+\end{align}
+%
+To compute $\w^*$ (analogous to the $\w^{**}$ that determines the exact Most
+Influential Set), we compute $\infl_n$ for each $n$. Then we choose $\w^*$ to
+have entries equal to zero at the $\lfloor \alpha N \rfloor$ indices $n$ where
+$\infl_n$ is most negative (and to have entries equal to one elsewhere).
+Analogous to the Perturbation Inducing Proportion, we can find the minimum data
+proportion $\alpha$ required to achieve a change of some size $\Delta$: i.e.,
+such that $\thetafunlin(\w^*) - \thetafunhat > \Delta$. In particular, we
+iteratively remove the most negative $\infl_n$ (and the index $n$) until the
+$\Delta$ change is achieved; if the number of removed points is $M$, the
+proportion we report is $\alpha = M/N$. Recall that finding the exact Maximum
+Influence Perturbation, Most Influential Set, and Perturbation-Inducing
+Proportion required running a data analysis more than $\binom{N}{\lfloor \alpha
+N \rfloor}$ times. By contrast, our approximation requires running just the
+single original data analysis, $N$ additional fast calculations to compute each
+$\infl_n$, and finally a sort on the $\infl_n$ values.
+
+We define our approximate quantities, as detailed immediately above, as follows.
+%
+\begin{defn} \deflabel{approx_metrics}
+%
+The \emph{Approximate Most Influential Set} is the set $\amis{\alpha}$ of at
+most 100$\alpha$\% data indices that, when left out, induce the biggest
+approximate change $\thetafunlin(\w) - \thetafunhat$; i.e., it is the set of
+data indices left out by $\w^*$: $\amis{\alpha} := \left\{n: \w^{*}_n = 0
+\right\}$.
+
+The \emph{Approximate Maximum Influence Perturbation (AMIP)} $\amip{\alpha}$ is
+the approximate change observed at $\w^*$: $\amip{\alpha} :=
+\thetafunlin(\w^{*}) - \thetafunhat$.
+
+The \emph{Approximate Perturbation Inducing Proportion} $\aloprop{\Delta}$ is
+the smallest $\alpha$ needed to cause the approximate change $\thetafunlin(\w) -
+\thetafunhat$ to be greater than $\Delta$. That is, $\aloprop{\Delta} := \inf\{
+\alpha: \amip{\alpha} > \Delta\}$. We report $\na$ if no $\alpha \in [0,1]$ can
+effect this change.
+%
+\end{defn}
+
+Below, we will sometimes emphasise that the AMIP is a sensitivity and refer to
+it as the \emph{AMIP sensitivity}. We will say that an analysis is
+\emph{AMIP-non-robust} if, for a particular $\alpha$ of interest, the AMIP is
+large enough to change the substantive conclusions of the analysis.  Conversely,
+if the AMIP is not large enough, we say an analysis is \emph{AMIP-robust}.
+% In particular, we distinguish between \emph{sensitivity} as an
+% objective and continuous quantity and \emph{robustness} as a subjective judgment
+% informed by sensitivity.
+And we generically use the AMIP acronym to describe our
+methodology even when calculating the Approximate Most Influential Set or
+Approximate Perturbation Inducing Proportion.
+
+%%%
+\subsubsection{An exact lower bound on the Maximum Influence Perturbation}
+\seclabel{exact_lower_bound}
+
+For any problem where performing estimation a second time is not prohibitively
+costly, we can re-run our analysis without the data points in the Approximate
+Most Influential Set and thereby provide a lower bound on the exact Maximum
+Influence Perturbation.
+
+Formally, let $\w^{**}$ be the weight vector for the exact Most Influential Set,
+and let $\w^*$ be the weight vector for the Approximate Most Influential Set
+$\amis{\alpha}$. We run the estimation procedure an extra time to recover
+$\thetafun(\thetahat(\w^{*}), \w^{*})$. Then, by definition,
+%
+\begin{align*}
+	\mip{\alpha} = \thetafun(\thetahat(\w^{**}), \w^{**}) - \thetafunhat
+		&=
+                    \maxover{\w \in W_\alpha}
+                    \left(\thetafun(\thetahat(\w), \w) - \thetafunhat \right)
+                    \ge
+                    \thetafun(\thetahat(\w^{*}), \w^{*}) - \thetafunhat.
+\end{align*}
+%
+Since $\thetafun(\thetahat(\w^{*}), \w^{*}) - \thetafunhat$ is a lower bound for
+$\mip{\alpha}$, we can use the Approximate Most Influential Set to
+conclusively demonstrate non-robustness. Of course, this lower bound holds for
+{\em any} weight vector and will be most useful if the Approximate Maximum
+Influence Perturbation is close to the exact Maximum Influence Perturbation. In
+\secref{accuracy} below, we establish the accuracy of the approximation for small
+$\alpha$ under mild regularity conditions.
+
+%%%
+\subsubsection{Computing the influence scores}
+%%%
+
+To finish describing our approximation, it remains to detail how to compute
+$\infl_n = \fracat{\partial \thetafun(\thetahat(\w), \w)}{\partial
+w_n}{\w=\onevec}$ from \eqref{taylor_approx}. We will refer to the quantity
+$\fracat{\partial \thetafun(\thetahat(\w), \w)}{\partial w_n}{\w}$ as the
+\emph{influence score} of data point $n$ for $\thetafun$ at $\w$ since, as we
+discuss in \secref{influence_function} below, it is the \emph{empirical
+influence function} evaluated at the datapoint $\d_{n}$. To compute the
+influence score, we first apply the chain rule:
+%
+\begin{align} \eqlabel{chain_rule_influence_score}
+	\fracat{\partial \thetafun(\thetahat(\w), \w)}{\partial w_n}
+           {\thetahat(\w), \w}
+		&=  \fracat{\partial \thetafun(\theta, \w)}{\partial \theta^T}{\thetahat(\w), \w}
+   			 \fracat{\partial \thetahat(\w)}{\partial w_n}{\w} +
+  			\fracat{\partial \thetafun(\theta, \w)}{\partial w_n}{\thetahat(\w), \w}.
+\end{align}
+%
+The derivatives of $\thetafun(\cdot,\cdot)$ can be calculated using automatic
+differentiation software
+\citep{baydin2018automatic,tensorflow:2015:whitepaper,jax:2018:github,pytorch:2019:lots}.
+And once we have $\thetahat(\onevec)$ from running the original data analysis,
+we can evaluate these derivatives at $\w = \onevec$: e.g., $\fracat{\partial
+\thetafun(\theta, \w)}{\partial \theta^T}{\thetahat(\onevec), \w=\onevec}$.
+
+The term $\fracat{\partial \thetahat(\w)}{\partial w_n}{\w = \onevec}$ requires
+slightly more work since $\thetahat(\w)$ is defined implicitly. We follow
+standard arguments from the statistics and mathematics literatures
+\citep{krantz2012implicit, hampel1974influence} to show how to calculate it
+below.
+
+Start by considering the more general setting where $\thetahat(\w)$ is the
+solution to the equation $\gamma(\thetahat(\w), \w) =  \zP $. We assume
+$\gamma(\cdot, \w)$ is continuously differentiable with full-rank Jacobian
+matrix; then the derivative $\fracat{\partial \thetahat(\w)}{\partial w_n}{\w}$
+exists by the implicit function theorem \citep[Theorem
+3.3.1]{krantz2012implicit}. We can thus use the chain rule and solve for
+$\fracat{\partial \thetahat(\w)}{\partial w_n}{\w}$; in what follows, $\zPN$ is
+the $\P \times N$ matrix of zeros.
+%
+\begin{align}
+	\zPN &= \fracat{\dee \gamma(\thetahat(\w), \w)}{\dee \w^T}{\w}
+		= \fracat{\partial \gamma(\theta, \w)}{\partial \theta^T}{\thetahat(\w), \w}
+\fracat{\dee \thetahat(\w)}{\dee \w^{T}}{\w} +
+\fracat{\partial \gamma(\theta, \w)}{\partial \w^T}{\thetahat(\w), \w} \\
+\Rightarrow
+	%
+	\eqlabel{dtheta_dw_general}
+	\fracat{\dee \thetahat(\w)}{\dee \w^{T}}{\w}
+		&= -\left( \fracat{\partial \gamma(\theta, \w)}
+                 	  {\partial \theta^T}{\thetahat(\w), \w} \right)^{-1}
+			\fracat{\partial \gamma(\theta, \w)}{\partial \w^T}{\thetahat(\w), \w},
+\end{align}
+%
+where we can take the inverse by our full-rank assumption.
+
+We apply the general setting above to our special case with $\gamma(\theta, \w) =
+\sumn w_n G(\theta, \d_{n})$ to find
+%
+\begin{align} \eqlabel{dtheta_dw}
+	\fracat{\dee \thetahat(\w)}{\dee \w^T}{\w}
+		&= -\left( \sumn w_n
+        			\fracat{\partial G(\theta, \d_{n})}
+               		{\partial \theta^T}{\thetahat(\w)} \right)^{-1}
+			\left(
+   				 G(\thetahat(\w), \d_{1}), \ldots, G(\thetahat(\w), \d_{N})
+			\right),
+\end{align}
+%
+which can again be computed with automatic differentiation software.

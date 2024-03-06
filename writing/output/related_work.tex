@@ -1,0 +1,174 @@
+The present work belongs to an extensive ``local robustness'' literature, which
+is concerned with measuring robustness using local properties of an estimator
+such as series approximations.  In particular, our reliance on the influence
+function and its related properties is shared with a great deal of the existing
+statistical robustness literature.  Arguably beginning with
+\citet{mises1947asymptotic}, the idea of forming series expansions in the space
+of data distributions was developed for the purposes of asymptotic theory
+\citep[e.g.][]{jaeckel:1972:infinitesimal,reeds1976thesis,fernholz:1983:mises,vaart:1996:empiricalprocesses},
+design of robust estimators \citep[e.g.][chapter
+2.4]{hampel1974influence,hampel1986robustbook}, and the detection of
+``outliers''
+% \parencites[e.g., ][chapter 2]{belsley:1980:regression}[][]{cain:1984:approximatecaseinfluence}[][]{cook:1986:assessment}.
+(e.g., \citealt[chapter 2]{belsley:1980:regression};
+\citealt{cain:1984:approximatecaseinfluence}; \citealt{cook:1986:assessment}).
+% \citep[e.g.][]{belsley:1980:regression,cain:1984:approximatecaseinfluence,cook:1986:assessment}.
+Further, the influence function itself is a specific instance of a much broader
+idea of differentiating a model with respect to its inputs in order to assess
+sensitivity to generic perturbations (e.g. \citealt{cook:1986:assessment} again;
+\citealt{diaconis:1986:bayesconsistency};
+\citealt{ruggeri:1993:infinitesimalposteriorsensitivity};
+\citealt{basu:1996:local}, \citealt{gustafson:2012:localrobustnessbook};
+\citealt{giordano2022bnp}). Our work follows in and is deeply indebted to this line
+of work.
+
+The general form for the influence function of Z-estimators that we reproduce
+in \secref{taylor_series} has been noted many times before in the statistics
+literature (e.g., \citealt[chapter 3.4]{hampel1986robustbook};
+\citealt{taylor:1993:unifiedapproachtoinfluentialdata}; \citealt[example
+20.4]{vaart2000asymptotic}) and the machine learning literature (e.g.
+\citealt{koh:2017:blackbox}; \citealt{giordano:2019:swiss}). Moreover, it is 
+simply a consequence of the well-known implicit function theorem
+\citep{krantz2012implicit}.  Despite this recognition, there are many examples
+of special cases being derived in detail for particular models (e.g.
+\citealt{pregibon:1981:logistic}; \citealt{thomas:1989:assessing},
+\citealt{hattori:2009:ipcqcasedeletion}; \citealt{shi:2016:gmmcasedeletion}),
+suggesting that the simplicity of the general form of the derivative may be
+under-appreciated. As we argue in \secref{AMIP}, this general form is
+particularly useful to recognise in the age of high-quality automatic
+differentiation software.
+
+Our focus on dropping data rather than ``gross errors,'' though not without
+precedent, is distinct from much of the robustness literature.  Beginning with
+\citet{huber:1964:robustlocation}, much of the statistical robustness literature
+has been concerned with the possibility that the model distribution may have
+been contaminated with an arbitrarily adversarial distribution or, equivalently,
+the observed dataset contains values that can take on arbitrarily misleading
+values. In contrast, we focus on dropping asymptotically non-vanishing amounts
+of data, which remains a model-agnostic data perturbation while being less
+adversarial --- and arguably more reasonable in certain settings, such as
+generalization to slightly different populations --- than data that takes on
+arbitrarily adversarial values.
+
+Our ``perturbation-inducing proportion'' can be thought of as an example of a
+``breakdown point,'' when the latter is defined broadly as ``the proportion of
+data that can be changed in some way before something bad happens to the
+estimator.''  In the tradition of concern with gross errors, the breakdown point
+literature is primarily concerned with the amount of data that can be changed to
+an arbitrary degree before an estimator can be changed by an arbitrarily large
+amount \citep[chapter 1.2.5]{huber1981robust}.  Our concern, of course, is
+different: we only drop data and consider ``something bad'' to be a meaningful
+but finite change to a key quantity of interest. Early work such as
+\citet{huber:1983:notion} raises the possibility of more generic notions of
+breakdown points such as ours. However, as far as the authors are aware, the
+present work is the first to pursue our particular notion of breakdown point in
+detail.
+
+The concern with gross errors has also led to a large literature that aims to
+detect and define ``outliers'' in a context-agnostic way
+\citep[e.g.][]{belsley:1980:regression,cook:1982:residualsandinfluenceinregression,cook:1986:assessment,kempthorne:1986:decision,carlin:1991:expectedutilityinfluence}.
+Following \citet{cook:1977:detectionofinfluential}, much of this literature
+focuses, like us, on the effect of removing datapoints, though typically only on
+one or a small number of datapoints.  Furthermore, this line of work evaluates
+the effect of dropping datapoints in service of defining a context-agnostic
+notion of ``outlier'' rather than focusing, as we do, on a particular decision
+using the dataset at hand.
+
+A number of authors in the outlier detection literature consider the removal of
+multiple points.  Since their focus is always on identifying a small number of
+outliers, they do not consider, as we do, the inferential implications of or the
+accuracy of the linear approximation for leaving out a small, fixed proportion
+of the data.  For example, \citet[chapter 5]{hadi:2009:sensitivityinregression}
+derives straightforward versions of classical ``outlier'' metrics such as Cook's
+distance and Andrews-Pregibon statistics for multiple datapoints. \citet[section
+2.1]{belsley:1980:regression} discuss ``multiple-row effects'' for linear
+regression: motivated by the possibility that groups of points may be
+influential collectively but not individually, they propose a stepwise scheme
+for finding influential groups of observations based on repeatedly re-fitting
+the model, leaving the single most influential point out at each step.
+\citet{johnson:1983:predictiveinfluence} considers the effect on a posterior
+predictive distribution of the removal of three points out of a set of
+twenty-four, which is tractable because of the closed-form solution and
+relatively small number of combinations.  \citet{huh:1990:local} observes
+briefly that the first-order approximation to leaving out multiple points is the
+sum of their influence scores, a fact that they use to produce low-dimensional
+visual summaries of effects of groups of observations.
+\citet{taylor:1993:unifiedapproachtoinfluentialdata} observes that influence
+functions can estimate the effect of leaving out large numbers of datapoints but
+consider it not useful, since their primary objective is detecting small numbers
+of gross errors. To the best of the authors' knowledge, our analysis of the
+effects of leaving out a non-vanishing proportion of the data, both on the
+accuracy of the empirical influence function and on inferential conclusions, is
+new.
+
+Our concern with the effect of removing a small but adversarially selected
+subset of the population can also be found in the partial identification
+literature \citep{manski:2003:partial}.  For example, 
+\citet{lee:2005:partialidentification,semenova:2020:generalizedleebounds}
+consider settings where selection bias has ``contaminated'' the pool of treated
+observations. In their setting, under a monotonicity assumption, the {\em
+proportion} of excess observations can be consistently estimated, but not {\em
+which} individuals should be removed.\footnote{Concretely,
+\citet{lee:2005:partialidentification} considers a setting where the treatment
+of interest (participation in a jobs program) affects both the outcome of
+interest (hourly wages) and selection into the dataset (being employed).  To
+eliminate selection bias, the authors would like to estimate the effect of the
+jobs program on the wages of individuals who would have been employed whether or
+not they had received the treatment, but the pool of treated, employed
+individuals is ``contaminated'' by individuals who would have been unemployed
+in the control. Although the ``contaminating'' individuals cannot be
+individually identified, the {\em proportion} of ``contaminating'' individuals
+can be identified under the assumption that the jobs program only increases an
+individual's probability of being employed.} The authors then place sharp bounds
+on the actual causal effect by assuming that the excess individuals were those
+with the largest influence on the estimated causal effect.  Since the causal
+effect is a simple difference in averages, the most influential individuals can
+be identified as those with the largest response variables.  Our present work
+can be thought of as approximate partial identification for settings where (a)
+the proportion of contaminating observations cannot be estimated (e.g. no
+monotonicity assumption holds, or selection variables are not observed) and (b)
+which individuals are most influential for the analysis is not available in
+closed form and has to be approximated with the influence function.
+
+Finally, following the online publication of the present work on the arxiv, a
+number of papers have performed more sophisticated analyses of the maximum
+influence perturbation for the linear regression setting.  The problem of
+finding an exact perturbation-inducing proportion for linear regression is shown
+in \citet{moitra:2022:provablyauditingols} to be computationally hard, in the
+sense that, for fixed dimension, no algorithm that is polynomial in the number
+of data points exists.  However, both \citet{moitra:2022:provablyauditingols}
+and \citet{freund:2023:robustnessauditingols} propose algorithms to approximate
+the perturbation-inducing proportion that can be more accurate that our linear
+approximation, particularly when a large proportion of the data must be removed
+to effect a change.  Importantly, both \citet{moitra:2022:provablyauditingols}
+and \citet{freund:2023:robustnessauditingols} provide a lower bound on the
+perturbation-inducing proportion, which, unlike our approximation, can {\em
+certify} robustness.\footnote{Note that we can certify only non-robustness ---
+see \secref{AMIP}.} The methods of both \citet{moitra:2022:provablyauditingols}
+and \citet{freund:2023:robustnessauditingols} are computationally intensive and
+limited in practice to low-dimensional linear regression, though whether further
+improvements can be made remains an interesting open question.  A different
+approach is taken by \citet{kuschnig:2021:hiddeninfluencescores}, who propose
+using a linear approximation to iteratively and greedily remove small subsets of
+data in an attempt to avoid second-order ``masking'' effects.  The work
+described in this section is all limited to the linear regression setting,
+though \citet{kuschnig:2021:hiddeninfluencescores} could be extended to the
+general setting at the cost of the computation of multiple linear approximations
+for each quantity of interest.  Experimental benefits of these more
+computationally expensive approximations to the perturbation inducing
+proportion are seen primarily when the proportion of removed data is relatively
+large --- on the order of 5\% or higher.
+
+
+
+% \point{We consider dropping data rather than performing arbitrarily large
+% pertubations}
+%
+% \point{We target a particular quantity of interest for decision making rather
+% than attempting to generically identify outliers}
+%
+% \point{We considering dropping a non-vanishing (but proportionally small) amount
+% of data rather than individual or asymptotically vanishing sets of datapoints}
+%
+% \point{We derive finite sample error bounds for the accuracy of the
+% empirical influence function approximation}

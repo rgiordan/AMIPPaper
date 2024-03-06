@@ -1,0 +1,4 @@
+The original cash transfers raw data can be found here:
+https://www.openicpsr.org/openicpsr/project/113289/version/V1/view
+
+In particular, our analysis requires the file `table1.dta` to be in the current directory.

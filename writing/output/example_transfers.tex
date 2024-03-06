@@ -1,0 +1,108 @@
+We next show that an empirical analysis can still be AMIP-non-robust even after
+outliers are removed. To that end, we apply our techniques to examine the
+robustness of the main analysis from \citet{angelucci2009indirect}, one of the
+flagship studies showing the impact of cash transfers on ineligible
+(``non-poor'') households in the same villages, also known as ``spillover
+effects.'' The authors trimmed the consumption outcome for the non-poor
+households due to concerns about the influence of the largest values. Yet while
+the analysis on the poor households is quite robust, the analysis on the
+non-poor households---whom the trimming protocol actually affects---is much more
+sensitive.
+
+%%
+\subsubsection{Background and replication}
+%%
+
+\citet{angelucci2009indirect} employ a randomised controlled trial to study the
+impact of Progresa, a social program giving cash gifts to eligible poor
+households in Mexico. The randomization occurs at the village level. So one can
+estimate both a main effect on the poor households selected to receive Progresa
+and also the impact on the non-eligible ``non-poor'' households located in the
+same villages as Progresa-receiving poor households.
+
+The main results of the paper show that there are strong positive impacts of
+Progresa on total household consumption measured as an index both for eligible
+poor households and for the non-eligible households; see Table 1 of
+\citet{angelucci2009indirect}. The variable $\texttt{C\_ind}_{it}$ denotes total
+household consumption for household $i$ in time period $t$. Values of
+$\texttt{C\_ind}_{it}$ above 10,000 are removed; such households are, by
+definition, non-poor. The authors study three different time periods separately
+to detect any change in the impact between the short and long term. They
+condition on a large set of variables (a household poverty index, land size,
+head of household gender, age, whether the household speaks an indigenous
+language, and literacy; at the locality level, a poverty index, and the number
+of households) to help ensure a fair comparison between households in the
+treatment and control villages. In this case these controls are important; the
+effects on the ``non-poor'' households are significant at the 5\% level when the
+controls are included, but they are only significant at the 10\% level in a
+simple regression on a dummy for treatment status.
+
+The full data for the paper is available on the website of the \emph{American
+Economic Review} thanks to the open-data policies of the journal and the
+authors. We can successfully replicate the results of this analysis with the
+controls and without, and we proceed with the controls in our present analysis
+in accordance with the original authors' preferred specification. We consider
+the time periods indexed as $t=8,9,10$ in the dataset provided, though we note
+that the authors do not rely on the results at $t = 8$ as the roll-out was still
+ongoing. We employ $K$ control variables, where $X_{itk}$ is the $k$-th variable
+for household $i$ in period $t$. Then we run the following regression:
+%
+\begin{align*}
+%
+\texttt{C\_ind}_{it} = \beta_0 + \beta_1 \texttt{treat}_{poor,i} + \beta_2
+\texttt{treat}_{nonpoor,i} + \sum_{k = 1}^K \beta_{2+k}X_{itk} + \epsilon_{it}.
+%
+\end{align*}
+%
+Here, $\texttt{treat}_{poor,i}$ refers to an interaction between the treatment
+indicator and an indicator for being a poor household; correspondingly,
+$\texttt{treat}_{nonpoor,i}$ is an interaction between the treatment indicator
+and an indicator for being a non-poor household.  We are able to exactly
+replicate the results of Table 1 of \citet{angelucci2009indirect}, which
+exhibits positive effects of cash transfers.
+
+%%
+\subsubsection{AMIP Sensitivity Results}
+
+\CashTransfersResultsTable{}
+%%
+We apply our methodology to assess how many data points one need remove to
+change the sign, the significance, or to generate a significant result of the
+opposite sign to that found in the full sample. We focus on the latter two time
+periods, as households had received only partial transfers in the first time
+period, but we show all three in order to replicate Table 1 from the original
+paper. \tableref{cash_transfers_re_run_table} shows our results. Focusing on
+periods 9 and 10, we find that the inferences on the direct effects on the poor
+households are quite robust, but the inferences on the indirect effects are less
+so. For the analysis of the poor, one typically needs to remove much more than
+1\% of the sample to change conclusions. For the analysis of the non-poor, we
+can remove less than 0.1\% of the data to change conclusions. In fact, we can
+remove only 3 data points to change the significance status for both $t = 9$ and
+$t = 10$.
+
+We again check the quality of our approximation. The ``Refit Estimate'' column
+in \tableref{cash_transfers_re_run_table} shows the results of manually
+re-running each analysis after removing the implicated data points. In most
+cases the AMIP correctly identifies a combination of data points that can make
+the claimed changes to the conclusions of the study. Although there are a few
+cases where re-running the analysis fails to produce the predicted statistically
+significant sign change, the observed changes are still large enough to be of
+practical interest.  Furthermore, it is likely that the removal of a few
+additional points would in fact produce the desired statistically significant
+sign reversals.
+
+Finally, we note that these results constitute an illustration of how gross
+error robustness is distinct from AMIP robustness (see
+\secpointref{influence_function_for_real}{gross_errors}). Recall that
+\citet{angelucci2009indirect} removed (non-poor) datapoints for which
+consumption was greater than 10,000. By removing outliers of the consumption
+variable in this way, the authors of this study made what is typically
+considered a conservative choice in view of classical robustness concerns about
+gross error sensitivity. Yet, as we have shown in
+\tableref{cash_transfers_re_run_table}, qualitative conclusions concerning the
+non-poor households remain non-robust to the removal of a small number of
+datapoints, which demonstrates empirically that one cannot necessarily make an
+analysis AMIP-robust by simply trimming outliers.  Indeed, as we showed above in
+\secref{influence_function_ols}, even perfectly specified OLS regressions with
+no aberrant data points can be AMIP-non-robust if the signal to noise ratio is
+too low.

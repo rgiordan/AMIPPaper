@@ -1,0 +1,222 @@
+Recall that \thmref{thetafun_accuracy} provides upper bounds on
+two quantities:
+%
+\begin{align*}
+    %
+    \textrm{Error} :={}&
+    \abs{\thetafunlin(\w) - \thetafun(\thetahat(\w), \w)} \le C_1 \alpha
+&
+    \textrm{Diff} :={}&
+        \abs{\thetafun(\thetahat(\w), \w) - \thetafunhat}  \le C_2 \sqrt{\alpha}.
+%
+\end{align*}
+%
+To show that \thmref{thetafun_accuracy} is tight, we will construct a sequence
+of Z-estimators which satisfy \assuref{ij_assu} with a particular set of
+constants for all $N$, and which satisfies
+%
+\begin{align*}
+%
+\frac{\textrm{Error}}{\alpha} ={}&
+\frac{\abs{\thetafunlin(\w) - \thetafun(\thetahat(\w), \w)}}{\alpha}
+\rightarrow{} 1 
+&
+\frac{\textrm{Difference}}{\sqrt{\alpha}} ={}&
+\frac{\abs{\thetafun(\thetahat(\w), \w) - \thetafunhat}}{\sqrt{\alpha}}
+\rightarrow{} 1
+%
+\end{align*}
+%
+as $\alpha \rightarrow 0$ (which requires $N \rightarrow \infty$ since we will
+require $\alpha > 1/N$ to leave out at least one datapoint).  As $\alpha$
+approaches zero, this Z estimator comes arbitrarily close to the upper bounds of
+\thmref{thetafun_accuracy}, showing that \thmref{thetafun_accuracy} is tight.
+
+For a scalar $\theta$, we consider a Z-estimator of the form
+%
+\begin{align}\eqlabel{tight_z_estimator}
+%
+G(\theta, \d_n)  = \theta b_n - a_n,
+%
+\end{align}
+%
+where $\d_n = (a_n, b_n)$.\footnote{Such an estimating equation might arise from
+minimizing the squared error loss $\sumn \frac{1}{2} (x_n \theta - y_n)$, where
+we take $b_n = x_n^2$ and $a_n = x_n y_n$. For any $b_n > 0$ and any $a_n$, we
+can define a corresponding $x_n$ and $y_n$ that would give rise to
+\eqref{tight_z_estimator}.} Let $a = (a_1, \ldots, a_N)$ and $b=(b_1, \ldots,
+b_N)$ denote the corresponding $N$-vectors. We will shortly choose the values of
+$a$ and $b$ carefully, but we will immediately assume that $\sumn a_n =
+\onevec^T a = 0$. We will take $\theta$ itself to be our quantity of interest,
+i.e., $\thetafun(\theta)  = \theta$.  
+
+It follows by direct computation that
+%
+\begin{align*}
+\thetafun(\w) = \thetahat(\w) ={}& \frac{a^T \w}{b^T \w}
+% \quad\textrm{and}\quad
+&
+\fracat{\partial \thetafun(\w)}{\partial \w^T}{\w} ={}&
+    - \frac{\thetahat(\w) b^T - a^T}{ b^T \w}\\
+%
+\thetafunhat = \thetafun(\onevec) ={}& 0
+% \quad\textrm{and}\quad
+&
+\thetafunlin(\w) ={}& \frac{a^T \w}{ b^T \onevec}
+\end{align*}
+%
+
+Plugging in, we see that
+%
+\begin{align*}
+%
+\textrm{Error} ={}&
+% \abs{\thetafunlin(\w) - \thetafun(\thetahat(\w), \w)} ={}&
+\abs{a^T \w}\abs{\frac{1}{ b^T \onevec} - \frac{1}{b^T \w}}
+&
+\textrm{Diff} ={}&
+% \abs{\thetafun(\thetahat(\w), \w) - \thetafunhat} = {}&
+\abs{\frac{a^T \w}{b^T \w}}.
+%
+\end{align*}
+%
+We will take $\w_\alpha$ to be a weight vector that is zero in its first $\alpha
+N$ entries and one otherwise, for $\alpha \propto 1/N$ and $\alpha \in (0,
+1/2)$.
+
+Without additional constraints, the error and difference can take a wide range
+of values for a particular $\w$.  For example, if $a$ is identically zero, then
+both are zero.  Alternatively, if $b^T w = b^T \onevec$, then the error is zero,
+even if the difference is not.  More pathologically, if $b^T \onevec \ll b^T
+\w$, then the error can be arbitrarily large relative to the difference.  
+In practical terms, this pathological setting would correspond to a nearly
+singular objective Hessian, and very large $\cop$ in \assuref{ij_assu}.
+
+However, this pathological case does not contradict \thmref{thetafun_accuracy}.
+\Thmref{thetafun_accuracy} states that, for a particular set of constants given
+by \assuref{ij_assu}, as $\alpha \rightarrow 0$, the bounds of
+\thmref{thetafun_accuracy} apply.  Therefore, to investigate the tightness of
+the bounds in \thmref{thetafun_accuracy}, we will choose $a$ and $b$ in such a
+way that, as $N$ grows, \assuref{ij_assu} is satisfied for a particular set of
+reasonable constants for all $N$.  It will suffice to choose $a$ and $b$
+satisfying
+%
+\begin{align}
+    N^{-1} a^T \onevec ={}& 0 &
+    N^{-1} a^T a ={}& 1 \nonumber\\
+    N^{-1} b^T \onevec ={}& 1   &
+    N^{-1} (b - \onevec)^T (b - \onevec) ={}& 1.
+    \eqlabel{z_constraints}
+\end{align}
+%
+Equivalently, we require that the $a_n$ have sample mean equal to $0$, the $b_n$
+have sample mean equal to $1$, and both have sample variance equal to $1$.
+
+
+Let $\w_\alpha$ denote a weight vector which is all ones except for zeros in the
+first $\alpha N$ entries, for $\alpha \propto 1/N$ and $\alpha > 0$. Within
+these constraints, we will attempt to choose $a$ and $b$ so that the error and
+difference are both as large as possible for a given $\w_\alpha$. For the
+remainder of this section, suprema and infima taken over $a$ and $b$ will
+implicitly be taken over $a$ and $b$ satisfying \eqref{z_constraints}.
+
+First, we choose $a$. Both the error and difference are made large by making
+$a^T \w_\alpha$ large for a given $\w_\alpha$, subject to $a^T \onevec = 0$ and
+$\frac{1}{N} a^T a = 1$. We solve this constrained optimization problem in
+\pointref{shape} of \secref{amip_decomposition}, showing that 
+
+\def\astar{{a^{*}}}
+\def\bstar{{b^{*}}}
+%
+\begin{align*}
+%
+\sup_{a} a^T \w_\alpha = \astar^T \w_\alpha = N \sqrt{\alpha ( 1 - \alpha)},
+%
+\end{align*}
+%
+where $\astar$ is constant and negative in entries where $\w_\alpha$ is zero,
+and constant and positive in entries where $\w_\alpha$ is one.
+
+\def\bbar{\bar{b}}
+\def\wdiff{\Delta_\alpha}
+
+Next, to choose $b$, we form a series expansion of $(b^T \w_\alpha)^{-1}$.
+Define $\bbar := b - \onevec$ (so that $\onevec^T \bbar = 0$ and $N^{-1}
+\bbar^T \bbar = 1$), and define $\wdiff := \w_\alpha - \onevec$.  
+For sufficiently small $\alpha$, we can form the following expansion:
+%
+\begin{align*}
+%
+\frac{1}{b^T \w_\alpha} ={}&
+\frac{1}{N} \frac{1}{\frac{1}{N} b^T (\wdiff + \onevec)} =
+\frac{1}{N} \frac{1}{\frac{1}{N} b^T \wdiff + 1} =
+\frac{1}{N} \left(1 - \frac{1}{N} b^T \wdiff + \left(\frac{1}{N} b^T \wdiff\right)^2 - 
+    \ldots \right).
+%
+\end{align*}
+%
+The expansion is justified for sufficiently small $\alpha$ by \pointref{shape}
+of \secref{amip_decomposition}, since, given these constraints on $\bbar$,
+%
+\begin{align*}
+%
+\sup_{b} \frac{1}{N} \abs{b^T \wdiff} ={}&
+\sup_{\bbar} \frac{1}{N} \abs{(\bbar + \onevec )^T \w_\alpha  - N} ={}
+\sup_{\bbar} \frac{1}{N} \abs{\bbar^T \w_\alpha  -\alpha N} \le {}
+\abs{\sqrt{\alpha(1 - \alpha)}} + \alpha.
+%
+\end{align*}
+%
+The preceding inequality also implies that, for sufficiently small $\alpha$, the
+leading term will dominate, and this leading term will be made as large as
+possible by making $\frac{1}{N} b^T \wdiff$ as negative as possible.  By the
+same reasoning as the preceding display,
+%
+\begin{align*}
+%
+\inf_{b} \frac{1}{N} b^T \wdiff = - \sqrt{\alpha(1 - \alpha)} - \alpha,
+%
+\end{align*}
+%
+where the supremum is achieved at a value we call $\bstar$.
+%
+Applying the same expansion, we analogously get
+%
+\begin{align*}
+    \frac{1}{b^T \w} -     \frac{1}{ b^T \onevec} ={}&
+    \frac{1}{N} \left(- \frac{1}{N} b^T \wdiff + \left(\frac{1}{N} b^T \wdiff\right)^2 - 
+    \ldots \right).
+\end{align*}
+%
+Consequently, the leading order term of $\abs{\frac{1}{ b^T \onevec} -
+\frac{1}{b^T \w}}$ is also maximised at $\bstar$.
+%
+Combining, we see that, as  $\alpha \rightarrow 0$,
+%
+\begin{align*}
+%
+\frac{N}{\bstar^T \w_\alpha} \rightarrow{}& 1
+&
+\frac{N \abs{\frac{1}{ \bstar^T \onevec} -
+             \frac{1}{\bstar^T \w_\alpha}}}{\sqrt{\alpha}} \rightarrow{}& 1.
+%
+\end{align*}
+%
+
+
+Evaluating both the difference and error at $\astar$ and $\bstar$, we get
+our desired result:
+%
+\begin{align*}
+%
+\frac{\textrm{Error}}{\alpha} ={}&
+\frac{\abs{\astar^T \w_\alpha}\abs{
+    \frac{1}{ \bstar^T \onevec} - \frac{1}{\bstar^T \w_\alpha}}}{\alpha}
+    \rightarrow 1
+&
+\frac{\textrm{Difference}}{\sqrt{\alpha}} ={}&
+\frac{\abs{\frac{\astar^T \w}{\bstar^T \w_\alpha}}}{\sqrt{\alpha}}
+\rightarrow 1.
+%
+\end{align*}
+%

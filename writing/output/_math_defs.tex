@@ -1,0 +1,106 @@
+% Math definitions
+
+% Some definitions for the text
+
+\def\loset{MIS}
+\def\loeff{MIP}
+\def\loalpha{PIP}
+\def\aloset{AMIS}
+\def\aloeff{AMIP}
+\def\aloalpha{APIP}
+\def\na{\texttt{NA}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Rachael's math defs
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+
+%\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Ryan's math defs
+
+
+\def\shape{\hat{\mathscr{T}}_\alpha}
+
+\global\long\def\info{\mathcal{I}}%
+% \def\plim{\xrightarrow[N \rightarrow \infty]{p}}%
+\def\plim{\xrightarrow{p}}%
+\def\dlim{\rightsquigarrow}%
+
+% These are all used for the finite sample bounds section.
+\global\long\def\betalin{\hat\beta^{\mathrm{lin}}}%
+\global\long\def\nset{\mathcal{S}}%
+
+\global\long\def\cop{C_{op}}%
+\global\long\def\cmoment{H_2}%
+\global\long\def\cxxlo{\xi_1}%
+\global\long\def\cxepslo{\xi_2}%
+\global\long\def\cball{\mathscr{B}}%
+\global\long\def\cijdiff{\Delta_{lin}}%
+\global\long\def\copscaled{\tilde{C}_{op}}%
+\global\long\def\cgh{C_{gh}}%
+\global\long\def\lh{L_{h}}%
+\global\long\def\cij{C_{IJ}}%
+
+\def\thetadom{\Omega_\theta}
+
+% calculus
+\newcommand{\dee}{\mathrm{d}}
+
+% Influence score and related quantities
+\def\infl{\psi}
+\def\inflscale{\hat{\sigma}_{\infl}}
+\def\inflscalelim{\sigma_{\infl}}
+\def\mis#1{S_{#1}}
+\def\mip#1{\Psi_{#1}}
+\def\amis#1{\hat{S}_{#1}}
+\def\amip#1{\hat{\Psi}_{#1}}
+\def\loprop#1{\alpha^*_{#1}}
+\def\aloprop#1{\hat{\alpha}^*_{#1}}
+\def\thetafun{\phi}
+\def\thetafunhat{\hat{\phi}}
+\def\thetafunlin{\thetafun^{\mathrm{lin}}}%
+\def\thetalin{\thetahat^{\mathrm{lin}}}%
+
+% Vectors
+%\def\x{\vec{x}}
+\def\d{d} % A general data point
+\def\p{p} % The index into the parameter vector
+\def\P{P} % The length of the parameter vector
+\def\w{\vec{w}}
+\def\wnorm{\vec{\omega}} % Used only in the \thetafun lemma
+
+\def\zP{0_{\P}}
+\def\zPN{0_{\P \times N}}
+\def\thetahat{\hat{\theta}}
+\def\thetalim{\theta_{\infty}}
+\def\onevec{\vec{1}}
+\def\inflvec{\vec{\infl}}
+
+% Operators
+\def\sumn{\sum_{n=1}^N}
+\def\meann{\frac{1}{N}\sum_{n=1}^N}
+\def\var#1{\mathrm{Var}\left(#1\right)}
+% \norm was taken, so use \vnorm for "vector norm".
+\def\vnorm#1{\left\Vert #1\right\Vert }%
+\def\falphanorm#1#2{\left\Vert #2\right\Vert_{#1, \alpha} }%
+\def\at#1#2{\left.#1\right|_{#2}}%
+\def\fracat#1#2#3{\at{\frac{#1}{#2}}{#3}}%
+\def\mbe{\mathbb{E}}%
+\def\expect#1{\mathbb{E}\left[#1\right]}%
+\def\ind#1{\mathbb{I}\left(#1\right)}%
+\def\argmaxover#1{\underset{#1}{\mathrm{argmax}}\,}
+\def\maxover#1{\underset{#1}{\mathrm{max}}\,}

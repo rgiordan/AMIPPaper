@@ -1,0 +1,478 @@
+\def\tz{T_Z}
+\def\tfun{T_\thetafun}
+\def\fhat{\hat{F}_N}
+\def\flim{F_{\infty}}
+\def\falt{F_{alt}}
+\def\fbase{F_{0}}
+\def\ic{\mathrm{IF}}
+\def\ichat#1{\widehat{IC}_{#1}}
+\def\wsum{N_{\w}}
+
+We next show that the conclusions of \secref{influence_function_ols} hold not
+just for OLS but in considerable generality for Z-estimators applied to
+IID data. In the present section, we will
+establish more generally that AMIP sensitivity is not a product of
+misspecification, does not vanish as $N$ goes to infinity, and is distinct from
+standard errors. To that end, in \secref{amip_decomposition} we first formally
+decompose the AMIP into the shape and noise terms defined at the beginning of
+\secref{why}, and we establish that the shape is roughly constant across
+distributions. Then, in \secref{amip_robustness_breakdown}, we use this
+decomposition to revisit our OLS conclusions about AMIP sensitivity but now more
+broadly. Finally, in \secref{influence_function_for_real}, we connect the AMIP
+to the influence function, showing how AMIP robustness is different from gross
+error robustness.
+
+
+
+\subsubsection{The decomposition of the AMIP}
+\seclabel{amip_decomposition}
+
+
+\point{The AMIP is the noise times the shape}
+\pointlabel{amip_decomposition}
+%
+Let $\infl_{(1)}, \ldots, \infl_{(N)}$ denote the order statistics of the
+influence scores.  Recall that the Approximate Maximum Influence Perturbation is
+given by the negative of the sum of the $\lfloor \alpha N \rfloor$ largest
+influence scores.  So we can write
+%
+\begin{align}
+%
+\amip{\alpha} = \thetafunlin(\w^{*}) - \thetafunhat =
+- \sum_{n=1}^{\lfloor \alpha N \rfloor} \infl_{(n)} \ind{\infl_{(n)} < 0} =
+\inflscale \shape.
+%
+\end{align}
+%
+The first equality follows from the definition of the AMIP $\amip{\alpha}$
+(\defref{approx_metrics}). The second equality follows from
+\eqref{w_approx_opt}. The third equality follows from the definitions of noise
+$\inflscale$ and shape $\shape$ at the start of \secref{why}.
+
+
+\point{The noise is an estimator of the standard deviation of the limiting
+distribution of the quantity of interest (Z-estimator version)}
+\pointlabel{noise}
+%
+In the case of Z-estimators, we can show by direct computation that
+$\inflscale^2$ is the estimator of the variance of the limiting distribution of
+$\sqrt{N}\thetafun(\thetahat)$ given by the delta method and the ``sandwich'' or
+``robust'' covariance estimator \citep{huber1967sandwich,
+stefanski:2002:mestimation}.  To see this, observe first that $\meann
+\fracat{\dee \thetahat(\w)}{\dee \w_n}{\onevec} \left( \fracat{\dee
+\thetahat(\w)}{\dee \w_n}{\onevec}\right)^T$, as given by \eqref{dtheta_dw}, is
+precisely the sandwich covariance estimator for the covariance of the limiting
+distribution of $\sqrt{N} \thetahat$.  In turn, the sample variance of the
+linear approximation given in \eqref{chain_rule_influence_score}, given by
+$\inflscale^2$, is then the delta method variance estimator for
+$\sqrt{N}\thetafunhat$.  Note that we came to the same conclusion in the special
+case of OLS in \secpointref{ols_what_determines}{ols_se_not_amip} above.
+
+It follows that we can use $\inflscale$ to form consistent credible intervals
+for $\thetafun$, a fact that will be useful below when comparing AMIP robustness
+to standard errors.  Specifically, if $\inflscale \plim \inflscalelim$ and
+$\thetahat \plim \thetalim$, then
+%
+\begin{align}\eqlabel{z_normal_limit}
+%
+\sqrt{N}(\thetafun(\thetahat) -
+\thetafun(\thetalim)) \dlim \mathcal{N}(0, \inflscalelim^2).
+%
+\end{align}
+%
+As we discuss in \secpointref{influence_function_for_real}{scale_via_influence}
+below, this relationship between asymptotic variance and the influence scores
+is in fact a consequence of a general relationship between influence functions
+and distributional limits.
+
+
+\point{The shape depends primarily on $\alpha$, not on the model specification}
+\pointlabel{shape}
+%
+More precisely, we next show that the shape $\shape$ satisfies the following
+properties. (1) With probability one, $0 \le \shape \le
+\sqrt{\alpha(1-\alpha)}$. (2) Typically, $\shape$ converges in probability to a
+nonzero constant as $N \rightarrow \infty$. (3) $\shape$ is largest when the
+influence scores of the left-out points are all equal. Conversely, heavy tails
+in the distribution of $\infl_n$ result in smaller values of $\shape$. (4)
+Empirically, $\shape$ varies relatively little among common sampling
+distributions.
+
+To prove the lower bound in (1), we observe that the indicator $\ind{\infl_{(n)} <
+0}$ accounts for the fact that the adversarial weight would leave out fewer
+points rather than drop a point with positive $\infl_{(n)}$.  Because of this,
+$\shape \ge 0$. We show the upper bound of (1) as part of the extremization
+argument for (3) below.
+
+To prove (2), notice that $\shape$ is a sum of $\lfloor \alpha N \rfloor$
+positive terms, divided by $N$. In general, then, we expect $\shape$ to converge
+to a nonzero constant for fixed $\alpha$ as long as the distribution of $N
+\infl_n$ converges marginally in distribution to a non-degenerate random
+variable.  And indeed, by \eqref{chain_rule_influence_score, dtheta_dw}, we
+expect such convergence from Slutsky's theorem as long as $\thetahat$ and
+$\meann \fracat{\partial G(\thetahat, \d_n)}{\partial\theta}{\thetahat}$
+converge in probability to constants, since $N \infl_n$ is proportional to
+$G(\thetahat, \d_n)$, which itself has a non-degenerate limiting distribution.
+
+We next show (3), that $\shape$ takes its largest possible value when all the
+influence scores $\infl_{(1)}, \ldots, \infl_{(\alpha N)}$ take the same
+negative value. To that end, take $\alpha N$ to be an integer for simplicity. By
+the definition of $\inflscale$ (\eqref{inflscale_def}), $\meann \left( \frac{N
+\infl_{(n)}}{\inflscale} \right)^2 = 1$, and by properties of the influence
+function detailed below, $\sumn \infl_n = 0$
+(\secpointref{influence_function_for_real}{infl_sum_zero}). So $\shape$ is a
+tail average of scalars with zero sample mean and unit sample variance.
+Therefore, it is equivalent to consider scalars $z_1, \ldots, z_N$ with $\meann
+z_n = 0$ and $\meann z_n^2 = 1$ and to ask how to maximise the average
+$-\frac{1}{\alpha N} \sum_{n=1}^{N\alpha} z_{(n)}$.
+
+To perform this maximization we divide datapoints into a set $D$ of dropped
+indices, and set $K$ of kept indices. To be precise, $D := \{n: z_{(n)} \le
+z_{(\alpha N)} \}$ and $K := \{1,\ldots,N\} \setminus D$. We write the sample
+means and variances within the sets respectively as $\mu_D := \frac{1}{\alpha N}
+\sum_{n \in D} z_n$ and $v_D := \frac{1}{\alpha N} \sum_{n \in D} (z_n -
+\mu_D)^2$, with analogous expressions for $\mu_K$ and $v_K$. In this notation,
+our goal is to extremise $\mu_D$, the mean in the dropped set.   The constraints
+on the distribution can then be written as $\meann z_n = 0 \Rightarrow \alpha
+\mu_D + (1- \alpha) \mu_K = 0$, and $\meann z_n^2 = 1 \Rightarrow \alpha(v_D +
+\mu_D^2) + (1 - \alpha) (v_K + \mu_K^2)  = 1$. Given these constraints, we
+extremise $\mu_D$ by setting $v_K = v_D = 0$, in which case we achieve $\mu_D =
+-\sqrt{(1 - \alpha) / \alpha}$. Identifying $N \infl_n / \inflscale$ with $z_n$,
+and $\shape$ with $\alpha \mu_D$, we see that the worst-case value of $\shape$
+occurs when all the influence scores $\infl_{(1)}, \ldots, \infl_{(\alpha N)}$
+take the same negative value. This observation completes our argument for (3).
+It also follows from this argument that $\shape \le \sqrt{\alpha (1 - \alpha)}$
+with probability one, a bound that is achieved in the worst-case. This
+observation supplies the upper bound in (1).
+
+To establish point (4), we fix a representative $\alpha$, simulate a large
+number of IID draws $\tilde{z}_n$ from some common distributions, standardise to
+get $z_n := \frac{\tilde{z}_{n} - \bar{\tilde{z}}}{\sqrt{\meann (\tilde{z}_n -
+\bar{\tilde{z}})^2}}$, and compute the shape $\shape = -\frac{1}{N}
+\sum_{n=1}^{\lfloor \alpha N \rfloor} z_{(n)}$. We find that, across common
+distributions, $\shape$ varies relatively little. For example, for $\alpha =
+0.01$, a Normal distribution gives $\shape = 0.0266$, a Cauchy distribution
+gives $\shape = 0.0022$.  As expected based on the reasoning of the previous
+paragraph, the heavy-tailed Cauchy distribution has a smaller shape than the
+Normal distribution.  The worst-case distribution, for which all left-out $z_n$
+are equal, gives $\shape = 0.0995 \approx \sqrt{\alpha(1-\alpha)}$ as expected.
+
+
+
+
+
+%%%
+\subsubsection{What determines AMIP robustness?}
+\seclabel{amip_robustness_breakdown}
+%%%
+We now use the decomposition of the AMIP into noise and shape, and the relative
+stability of the shape, to derive a number of general properties of AMIP
+robustness.
+
+% Note that this point contains the argument that the influence funciton scale
+% estimates the asymptotic variance for Z-estimators
+\point{Signal-to-noise ratio drives AMIP robustness}
+\pointlabel{snr_drives_amip}
+%
+We argued above that we do not expect $\shape$ to vary radically from
+one problem to another. By contrast, the noise $\inflscale$ can, in principle,
+be any positive number.  We conclude then, that the signal-to-noise ratio,
+rather than the shape, principally determines AMIP robustness.
+
+This relationship also suggests what might be done if the analysis is deemed
+AMIP non-robust. Since, as we showed in \secpointref{amip_decomposition}{noise},
+$\inflscale$ is thus the same quantity that enters standard error computations,
+analysts are typically attentive to choosing estimators with $\inflscale$ as
+small as possible while still guaranteeing desirable properties like
+consistency. Meanwhile, the signal $\Delta$ is determined by the question being
+asked and the true state of nature as estimated by $\thetahat$.  In light of
+these observations, consider a case where $\Delta / \inflscale$ is too small to
+ensure AMIP robustness. Then it seems necessary for the investigator to ask a
+different question, or investigate different data, to find an AMIP robust
+analysis.
+
+
+\point{AMIP sensitivity does not vanish as $N \rightarrow \infty$}
+\pointlabel{amip_does_not_vanish}
+%
+Both $\inflscale$ and $\shape$ converge to nonzero constants. So $\inflscale
+\shape$, the estimated amount by which you can change an estimator, does not go
+to zero, either. If the signal $\Delta$ is less than the probability limit of
+$\inflscale \shape$, then the problem will be AMIP non-robust no matter how
+large $N$ grows. As we discuss below, this behavior contrasts sharply with the
+behavior of standard errors.
+
+
+\point{AMIP non-robustness is not due only to misspecification}
+%
+Consider a correctly-specified problem with no aberrant data points. As we
+discussed above in  \secpointref{amip_decomposition}{noise},
+% (see also \secpointref{influence_function_for_real}{scale_via_influence})
+the noise will still have some non-zero probability limit. We showed in
+\secpointref{amip_decomposition}{shape} that the shape will have a non-zero
+probability limit. And the quantity of interest $\thetafun(\thetahat)$ can
+generally be expected to have a non-zero probability limit. So by the
+decomposition of \eqref{robustness_three_parts}, if the user is interested in a
+question whose signal is small enough, their problem will be AMIP non-robust,
+despite correct specification.
+
+
+\point{Though both are scaled by noise, standard errors are different from---and
+typically smaller than---AMIP sensitivity} \pointlabel{amip_is_not_se}
+%
+Recall that classical standard errors based on limiting normal approximations
+also depend on $\inflscale$, in that we typically report a confidence interval
+for $\thetafun$ of the form
+%
+$\thetafun \in \left(\thetafun(\theta, \onevec) \pm q_{\mathcal{N}}
+\frac{\inflscale}{\sqrt{N}}  \right)$,
+%
+where $q_{\mathcal{N}}$ is some quantile of the normal distribution, e.g. the
+0.975-th quantile $q_{\mathcal{N}} \approx 1.96$.  In this sense, using standard
+errors errors allow that $\thetafun$ may be as large as $\thetafun + \Delta$
+whenever $\Delta / \inflscale \le \frac{1.96}{\sqrt{N}}$. By contrast, AMIP
+robustness allows that $\thetafun$ may be as large as $\thetafun + \Delta$ when
+$\Delta / \inflscale \le \shape$. Since $\shape \ne \frac{1.96}{\sqrt{N}}$ in
+general, these two approaches will yield different conclusions.  Indeed,
+typically $\shape$ converges to a non-zero constant as $N \rightarrow 0$, while
+$\frac{1.96}{\sqrt{N}}$ converges to zero.
+
+
+\point{Statistical non-significance is always AMIP-non-robust as $N
+\rightarrow \infty$}
+%
+This observation follows as a corollary of the discussion above. In particular,
+we might conclude statistical non-significance if $\abs{\thetafun(\thetahat,
+\onevec)} \le \frac{1.96 \inflscale}{\sqrt{N}}$. To produce a statistically
+significant result, and so undermine the conclusion, it suffices to move
+$\thetafun(\thetahat, \onevec)$ by more than $\frac{1.96 \inflscale}{\sqrt{N}}$.
+Take any $\alpha$. As we have seen above, we can produce a change of $\inflscale
+\shape$, which is greater than $\frac{1.96 \inflscale}{\sqrt{N}}$ whenever
+$\shape > 1.96 / \sqrt{N}$.  Thus, for any fixed $\alpha$, there always exists a
+sufficiently large $N$ such that statistical non-significance can be undermined
+by dropping at most $\alpha$ proportion of the data. By contrast, statistical
+significance can be robust if $\thetafun(\thetahat, \onevec)$ converges to a
+value sufficiently far from $0$.
+
+
+
+%%%
+\subsubsection{The influence function}
+\seclabel{influence_function_for_real}
+%%%
+
+We next review the influence function, its known properties, and its particular
+form for Z-estimators \citep[e.g.,][chapter 2.3]{hampel1986robustbook}. We first
+show the relationship between the influence scores and the empirical influence
+function. We use these connections to further justify the relationship between
+the noise and the limiting distribution of $\sqrt{N}\thetafunhat$. Finally, we
+use these classical properties of the influence function to contrast AMIP
+robustness with gross error robustness and establish that outliers primarily
+affect AMIP robustness via the noise, rather than via the shape.
+
+
+\point{Writing a statistic as a functional of the empirical distribution}
+%
+Before defining the influence function, we set up some useful notation. Suppose
+we observe IID data, $\d_1, \ldots, \d_N$. Each point is drawn from a data
+distribution $\flim(\cdot) = p(\d_1 \le \cdot)$, where the inequality may be
+multi-dimensional. For a generic distribution $F$, let $T$ represent a
+functional of the distribution: $T(F)$.  One example is the sample mean; for a
+generic distribution $F$, let $T_{mean}(F) = \int \tilde{\d} \dee
+F(\tilde{\d})$.  Then $T_{mean}(\flim) = \expect{\d_1}$ is the population mean.
+If we let $\fhat$ denote the empirical distribution function $\fhat(\cdot) =
+\meann \ind{\cdot \le \d_n}$, then $T_{mean}(\fhat) = \meann \d_n$ is the sample
+mean.
+
+Now consider Z-estimators. Define $T_Z(F)$ to be a quantity satisfying
+\begin{align} \eqlabel{estimating_equation_F}
+	\int G(T_Z(F), \tilde{\d}) \dee F(\tilde{\d}) &= 0.
+\end{align}
+See, e.g., \citet[Section 4.2c, Def. 5]{hampel1986robustbook}. If we plug in
+$\fhat$ for $F$ in \eqref{estimating_equation_F} (and multiply both sides by $N$),
+we recover the Z-estimator estimating equation from
+\eqref{estimating_equation_no_weights}, with solution $\thetahat = T_Z(\fhat)$.
+%
+Similarly, let $\hat{F}_w$ to be the distribution function putting weight
+$N^{-1} w_n$ at data point $\d_{n}$. Plugging in $\hat{F}_w$ for $F$ in
+\eqref{estimating_equation_F} yields the estimating equation in
+\eqref{estimating_equation_with_weights}, for weighted Z-estimators, with
+solution $\thetahat(\w) = T_Z(\hat{F}_w)$.
+%
+Finally, we can define a new functional $T_\thetafun(F)$ by applying the smooth
+function $\thetafun$, which picks out our quantity of interest, to $T_Z(F)$:
+$T_\thetafun(F) = \thetafun(T_Z(F), \onevec)$.\footnote{ As in ordinary calculus
+in Euclidean space, we can also allow for explicit $F$ dependence in $\thetafun$
+by writing $\thetafun(\theta, F)$. Allowing this level of generality, though, is
+notationally burdensome and not typical in the analysis of the influence
+functions for Z-estimators. So we omit this dependence for simplicity.}
+
+
+
+\point{The influence function}
+%
+The influence function $\ic(\d; T, F)$ measures the effect on a statistic
+$T$ of adding an infinitesimal amount of mass at point $\d$ to some base or
+reference data distribution $F$
+\citep{reeds1976thesis,hampel1986robustbook}. Let $\delta_\d$ be the probability
+measure with an atom of size $1$ at $\d$. Then
+%
+\begin{align}\eqlabel{influence_function_def}
+%
+\ic(\d; T, F) := \lim_{\epsilon \searrow 0} \frac{ T(\epsilon \delta_\d +
+(1-\epsilon) F) - T(F)}{\epsilon}.
+%
+\end{align}
+%
+The influence function is defined in terms of an ordinary univariate derivative,
+and can be computed (as a function of $\d$ and $F$) using standard univariate
+calculus.  In particular, our quantity of interest has the following influence
+function:
+%
+\begin{align}
+%
+\eqlabel{influence_function_Z_estimator}
+	\ic(\d; T_\thetafun, F)
+	&=
+		-\fracat{
+				\partial \thetafun(\theta, \onevec)
+			}{
+				\partial \theta^T
+			}{
+				\thetahat(F)
+			}
+		\left(\int
+       			\fracat{
+					\partial G(\theta, \tilde{\d})
+				}{
+					\partial \theta^T
+				}{
+					\thetahat(F)
+				}
+			\dee F(\tilde{\d})
+    		\right)^{-1}
+    		G(\thetahat(F), \d).
+%
+\end{align}
+%
+By comparing \eqref{influence_function_Z_estimator} with
+the definition of $\infl_n$ in \eqref{chain_rule_influence_score, dtheta_dw}, we can see
+that, formally,\footnote{The factor of $N$ arises to re-write the expectation
+as a sum over unit-valued weights.}
+%
+\begin{align}\eqlabel{infl_is_infl}
+%
+N \infl_n = \ic(\d_n; T_\thetafun, \fhat).
+%
+\end{align}
+%
+\Eqref{infl_is_infl} is not a coincidence.  To see this, note that the set of
+distributions that can be expressed as weighted empirical distributions
+($\hat{F}_w$ above) is precisely the subspace of possible distribution functions
+concentrated on the observed data.  So the derivative $N \infl_n = N \partial
+\thetafun(\thetahat(\w), \onevec) / \partial \w_n$ (\eqref{taylor_approx}) is
+simply a path derivative representation of the functional derivative $\ic(\d_n;
+T_\thetafun, \fhat)$.
+
+We refer to the influence function applied with $F = \fhat$ as the
+\emph{empirical influence function} \citep{hampel1986robustbook}. We conclude
+that the $\infl_n$ that we use to form our approximation are the values of the
+empirical influence function at the datapoints $\d_1, \ldots, \d_N$. For this
+reason, we refer to the $\infl_n$ as influence scores.
+
+\point{The sum of the influence scores is zero}
+\pointlabel{infl_sum_zero}
+%
+We can now use standard properties of the influence function to reason about
+$\inflvec$. For instance, the fact that $\sumn \infl_n = 0$ follows from
+\eqref{influence_function_Z_estimator} and the fact that $\thetahat$ solves
+\eqref{estimating_equation_no_weights}.
+
+
+\point{The noise is an estimator of the standard deviation of the limiting
+distribution of the quantity of interest (influence function version)}
+\pointlabel{scale_via_influence}
+%
+Observe that, by our influence function development above, we can write
+the squared noise as follows.
+%
+\begin{align} \eqlabel{scale_is_influence_norm}
+%
+\inflscale^2 := N \vnorm{\inflvec}_2^2 =
+\meann (N \infl_n)^2 = \meann \ic(\d_n; T_\thetafun, \fhat)^2,
+%
+\end{align}
+
+Recall that we saw above that $\inflscale^2$ consistently estimates the variance
+of the limiting distribution of $\sqrt{N}\thetafunhat$, first in the special
+case of OLS (\secpointref{ols_what_determines}{ols_se_not_amip}) and then for
+Z-estimators in general (\secpointref{amip_decomposition}{noise}).  We can now
+see that those results are themselves special cases of the following well-known
+relationship between the influence function and the limiting variance of its
+corresponding functional:
+%
+\begin{align}\eqlabel{infl_normal_limit}
+%
+\sqrt{N}\left(T(\fhat) - T(\flim) \right) \dlim
+\mathcal{N}\left(0, \expect{\ic(\d_1; T, \flim)^2}\right),
+%
+\end{align}
+%
+where the expectation in the preceding display is taken with respect to $\d_1
+\sim \flim$ (see, e.g., \citet[Eq.
+2.1.8]{hampel1986robustbook}).\footnote{Though \eqref{infl_normal_limit} can
+provide useful intuition, as it does in our case, it is often easier in any
+particular problem to prove asymptotic results directly rather than through the
+functional analysis perspective of this section, since stating precise and
+general conditions under which \eqref{infl_normal_limit} holds can be
+challenging. See, for example, the discussion in \citet[Chapter
+6]{serfling2009approximation} or \citet[Chapter 20]{vaart2000asymptotic}.}
+%
+Specifically, if we can show that $\inflscalelim$, the probability limit of
+$\inflscale$, is equal to $\expect{\ic(\d_1; T, \flim)^2}$, then
+\eqref{infl_normal_limit} would imply $\sqrt{N}(T_\phi(\fhat) - T_\phi(\flim))
+\dlim \mathcal{N}(0, \inflscalelim^2)$, just as we showed in
+\eqref{z_normal_limit} using the sandwich covariance estimator. In our case,
+under standard assumptions, one can show directly from
+\eqref{chain_rule_influence_score, dtheta_dw} that $\ic(\d_n; T_\thetafun,
+\fhat) \plim \ic(\d_n; T_\thetafun, \flim)$, almost surely in $\d_n$.  A law of
+large numbers can then be applied to \eqref{scale_is_influence_norm} giving the
+desired result.
+
+
+\point{AMIP robustness is different from gross error robustness}
+\pointlabel{gross_errors}
+%
+Roughly speaking, an estimator is considered non-robust to gross errors if its
+influence function is unbounded \citep{huber1981robust}.  For instance, the
+influence function arising from the OLS Z-estimator
+(\secref{influence_function_ols}) is classically known to be non-robust to gross
+errors. When an influence function is unbounded, one can produce arbitrarily
+large changes in the quantity of interest by making arbitrarily large changes to
+a single datapoint.  Gross-error robustness is motivated by the possibility that
+some small number of datapoints come from a distribution arbitrarily different
+from the model's posited distribution. By contrast, to assess AMIP robustness,
+we do not make arbitrarily large changes to datapoints. We simply remove
+datapoints. And the analysis is AMIP-non-robust if a change of a particular size
+($\Delta$) can be induced, rather than an arbitrarily large change.
+Consequently, problems with unbounded influence functions (such as OLS in
+\secref{influence_function_ols}) can be AMIP-robust if $\Delta / \inflscale$ is
+sufficiently large. And perfectly specified problems with no outliers can be
+AMIP non-robust if $\Delta / \inflscale$ is sufficiently small.
+
+
+\point{Outliers affect AMIP robustness through the noise}
+\pointlabel{outliers}
+%
+Consideration of gross-error robustness encourages users to examine their data
+for unusual ``outliers'' in the data; once outliers are removed or their
+influence diminished, the problem is considered gross-error robust.  Since
+outliers are heuristically associated with heavy-tailed data distributions, one
+might expect the effect of outliers to affect AMIP robustness through the shape
+variable $\shape$.  However, our analysis of
+\secpointref{amip_decomposition}{shape} shows that gross errors actually {\em
+reduce} $\shape$ and so render an estimator more robust for a fixed
+$\inflscale$. This observation does not imply that gross errors decrease AMIP
+sensitivity.  Rather, gross errors increase AMIP sensitivity through the noise
+$\inflscale$. And, as we have seen, effects on $\inflscale$ also affect the
+computation of standard errors.

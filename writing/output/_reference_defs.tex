@@ -1,0 +1,163 @@
+
+%%%%%%%%%%%%%%%%%%%%
+% amsthm commands
+
+\theoremstyle{plain}
+\newtheorem{lem}{Lemma}
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{cond}{Condition}
+\newtheorem{assu}{Assumption}
+\newtheorem{cor}{Corollary}
+\newtheorem{conj}{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{example}{Example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Example:
+% https://latex.org/forum/viewtopic.php?t=10815
+
+\newcounter{point}[subsubsection]
+\setcounter{point}{1}
+
+\newenvironment{point}[1]%
+{
+\refstepcounter{point}
+\textbf{(\alph{point}) #1.}
+}%
+{}
+
+\newcommand{\pointlabel}[1]{\label{point:#1}}
+\renewcommand{\thepoint}{(\alph{point})}
+\newcommand{\pointref}[1]{Point \ref{point:#1}}
+\newcommand{\secpointref}[2]{\secref{#1}, paragraph \ref{point:#2}}
+
+% To reference a point, use
+% \secpointref{why}{signal_noise_shape}
+% Unfortunately, you have to specify the section manyally.  There does not
+% seem to be an easy way to get the section of a reference in LaTeX.
+% (The zref package might be a way but it looks complicated.)
+
+%%%%%%%%%%%%%%%%%%%%
+% refstyle commands
+
+\newref{sec}{
+    name=Section~, %
+    Name=Section~,
+    names=Sections~, %
+    Names=Sections~
+    }
+
+\newref{app}{
+    name=Appendix~, %
+    Name=Appendix~
+    }
+
+\newref{eq}{
+    name=Eq.~, %
+    Name=Eq.~,
+    names=Eqs.~, %
+    Names=Eqs.~
+    }
+
+\newref{fig}{
+    name=Figure~, %
+    Name=Figure~,
+    names=Figures~, %
+    Names=Figures~
+    }
+
+\newref{table}{
+    name=Table~, %
+    Name=Table~,
+    names=Tables~, %
+    Names=Tables~
+    }
+
+\newref{def}{
+    name=Definition~, %
+    Name=Definition~,
+    names=Definitions~, %
+    Names=Definitions~
+    }
+
+\newref{assu}{
+    name=Assumption~, %
+    Name=Assumption~,
+    names=Assumptions~, %
+    Names=Assumptions~,
+    }
+
+\newref{cond}{
+    name=Condition~, %
+    Name=Condition~,
+    names=Conditions~, %
+    Names=Conditions~
+    }
+
+\newref{prop}{
+    name=Proposition~, %
+    Name=Proposition~,
+    names=Propositions~, %
+    Names=Propositions~
+    }
+
+\newref{lem}{
+    name=Lemma~, %
+    Name=Lemma~
+    }
+
+\newref{ex}{
+    name=Example~, %
+    Name=Example~,
+    names=Examples~,
+    Names=Examples
+    }
+
+\newref{cor}{
+    name=Corollary~, %
+    Name=Corollary~,
+    names=Corollaries~,
+    Names=Corollaries
+    }
+
+\newref{thm}{
+    name=Theorem~, %
+    Name=Theorem~
+    }
+
+\newref{proof}{
+    name=Proof~, %
+    Name=Proof~
+    }
+
+\newref{conj}{
+    name=Conjecture~, %
+    Name=Conjecture~
+    }
+
+\newref{algr}{
+    name=Algorithm~, %
+    Name=Algorithm~,
+    names=Algorithms~, %
+    Names=Algorithms~,
+    }
+
+
+%% refstyle examples:
+% \Secref[vref]{introduction} contains \secref{introduction}.
+% \Secref[vref]{ack} does not contain \secref{introduction}.
+%
+% \begin{align}
+%     x=y \eqlabel{myeq}
+% \end{align}
+
+
+% Maybe you should do something like this.
+% https://tex.stackexchange.com/questions/201956/how-do-i-make-all-the-theorem-alike-environments-have-an-ending-symbol
+%
+% \newtheorem{eg}[theorem]{Example}
+% \newenvironment{example}[1][]{\begin{eg}[#1]\pushQED{\hfill $\blacksquare$}}{\popQED \end{eg}}

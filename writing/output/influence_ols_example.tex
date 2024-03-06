@@ -1,0 +1,275 @@
+We begin by focusing on the simple case of correctly-specified univariate linear
+regression, both to provide intuition and motivate the more general results
+that follow.
+
+\subsubsection{Problem setup for Ordinary Least Squares example}
+
+\point{Model}
+%
+\sloppy Let $X=(x_1, \ldots, x_N)^T$ denote a vector of $N$ continuous mean-zero
+regressors, drawn IID from a distribution with finite variance $\sigma_x^2$. Let
+$\varepsilon=(\varepsilon_1, \ldots, \varepsilon_N)$ be a vector of IID
+draws from a $\mathcal{N}(0, \sigma_\varepsilon^2)$ distribution, where
+we will assume $\sigma_\varepsilon$ is known.  For some unknown $\theta_0 \in
+\mathbb{R}$, let $y_n = \theta_0 x_n + \varepsilon_n$, so that the vector
+$Y=(y_1, \ldots, y_N)$ given $X$ is drawn from a correctly specified regression
+model with true coefficient $\theta_0$.
+
+\point{Weighted estimating equation}
+%
+The OLS estimator $\thetahat$ is traditionally found by maximizing the (log)
+likelihood: $\log p(y_n \vert \theta, x_n) = -\frac{1}{2
+\sigma_\varepsilon^{2}}(y_n - \theta x_n)^2 + C$, where $C$ does not depend on
+$\theta$. In particular, setting the derivative of the log likelihood to zero
+yields the estimating equation $G(\theta, \d_n) =
+-\frac{1}{\sigma_\varepsilon^{2}} (y_n - \theta x_n) x_n = 0$. That is,
+$\thetahat$ is a Z-estimator with this choice of $G$ (see
+\eqref{estimating_equation_no_weights}). Typical Z-estimators do not have
+closed-form solutions. But in this case, the solution to the estimating equation
+returns the usual OLS estimate. A similar derivation returns the solution to the
+weighted estimating equation given in \eqref{estimating_equation_with_weights}:
+$\thetahat(\w) = \left(\meann \w_n x_n^2 \right)^{-1} \meann \w_n y_n x_n$.
+
+
+\point{Quantity of interest}
+%
+Suppose we are interested in the sign of
+$\theta_0$. Without loss of generality, we assume $\thetahat < 0$. Then our
+quantity of interest is $\thetafun(\theta) = \theta$.
+
+
+\point{Signal and noise}
+\pointlabel{ols_signal_and_noise}
+%
+For our quantity of interest, the signal is $\Delta = \abs{\thetahat}$ since, if
+we can increase $\thetahat$ by an amount $\abs{\thetahat}$, its sign will
+change. To compute the noise, we compute the influence scores. Directly
+differentiating the explicit formula for $\thetahat$ gives, as it must, the same
+value for $\infl_n$ as the implicit function theorem result of
+\eqref{dtheta_dw_general}. Letting $\hat\varepsilon_n := y_n - \thetahat x_n$
+and $S_X := \meann x_n^2$, we see, either by direct differentiation or by
+\eqref{dtheta_dw_general}, that $\infl_n = N^{-1} S_X^{-1} x_n
+\hat\varepsilon_n$. For intuition about the noise $\inflscale$, we observe its
+asymptotic behavior. Standard results for OLS give:
+%
+\begin{align} \eqlabel{ols_limit_of_noise}
+%
+\inflscale^2 = \meann (N \infl_n)^2 = S_X^{-2} \meann x_n^2 \hat\varepsilon_n^2
+\plim \frac{\sigma_\varepsilon^2}{\sigma_x^2}.
+%
+\end{align}
+%
+Note that the noise includes a contribution from both the residual and regressor
+variance; we describe $\inflscale$ as the ``noise'' because it estimates the
+variability of $\sqrt{N} \thetahat$, not of the residuals (see
+\secpointref{ols_what_determines}{ols_se_not_amip} below). Finally, we emphasise
+that, although we will be using asymptotics to provide intuition, by ``noise''
+we will always mean the finite-sample quantity $\inflscale$, not its asymptotic
+limit.
+
+
+
+\subsubsection{What determines AMIP robustness for Ordinary Least Squares?}
+\seclabel{ols_what_determines}
+%
+Now that we have translated OLS into our framework, we can
+analyze the AMIP for OLS. To that end, we use both theory and a simulation study.
+We outline the simulation study before describing our main conclusions.
+%
+For $N=\SimNumObs$ data points, and for a range of $\sigma_x$ and
+$\sigma_\varepsilon$, we drew normal regressors $x_n \sim \mathcal{N}(0,
+\sigma_x^2)$ and residuals $\varepsilon_n \sim \mathcal{N}(0,
+\sigma_\varepsilon^2)$. For $\theta_0 =
+\SimTrueTheta$, we set $y_n = \theta_0 x_n + \varepsilon_n$.
+We computed the OLS estimator $\hat\theta = \sumn y_n x_n /
+\sumn x_n^2$.
+
+\SimCombNormalGraph{}
+
+\point{Signal-to-noise ratio drives AMIP robustness}
+%
+From our discussion at the start of \secref{why}, we expect that the
+signal-to-noise ratio drives whether an analysis is AMIP-robust or not. In our
+simulation, $N$ is large and we keep $\theta_0$ fixed, so we expect that the
+signal does not change substantially over the simulation. Therefore,
+signal-to-noise is controlled by the noise. Following the asymptotic argument
+above, we approximate the noise as $\sigma_\varepsilon / \sigma_x$. In the left
+panel of \figref{sim-comb-normal}, we vary $\sigma_\varepsilon$ and $\sigma_x$
+and plot the resulting Approximate Perturbation Inducing Proportion $\alpha^*$
+to change the sign of $\hat\theta$. As expected, we see that the simulations
+with the largest approximate noise $\sigma_\varepsilon / \sigma_x$ are the least
+robust, in the sense that one can reverse the sign of $\hat\theta$ by dropping a
+very small proportion of points.
+
+\point{Influential data points have both a large residual and large regressor}
+%
+Let $(\hat\varepsilon x)_{(n)}$ denote the products $\hat\varepsilon_n x_n$,
+sorted from most negative to most positive, so that the sorted influence scores
+are $\infl_{(n)} = N^{-1} S_X^{-1} (\hat\varepsilon x)_{(n)}$.  From this
+formula, we observe that influential datapoints have both a large residual and a
+large regressor (relative to the regressor variance).\footnote{ Indeed, if we
+had taken $\thetafun(\theta) = \thetahat x_n = \hat{y}_n$, then the $n$-th
+influence score would have been $S_X^{-1} x_n^2 \hat\varepsilon_n$, which is
+precisely the leverage score times the residual. This expression formalises the
+conceptual link made by \citet{chatterjee1986influential} between influence,
+leverage, and large values of $\hat\varepsilon_n$. } A typical influence score
+goes to zero at rate $N^{-1}$, though extreme values such as $\max_{n}
+\abs{\infl_n}$ may obey a different rate.  However, since $\meann x_n^2$ and
+$\meann \varepsilon_n^2$ are finite with high probability, even $\max_{n}
+\abs{\infl_n}$ does not diverge in this case.\footnote{The finiteness follows
+from the inequality $\frac{1}{N} \max_{n} x_n^2 \le \meann x_n^2 \plim
+\sigma_x^2$, with an analogous inequality for $\varepsilon_n$. However, since we
+know $\varepsilon_n$ is Gaussian, we actually have a stronger result in this
+case: $\max_{n \in \{1,\ldots,N\}} \abs{\varepsilon_n}$ grows at rate
+$\sqrt{\log (2N)}$ \citep[Theorem 1.14]{rigollet:2015:highdimstats}.}
+
+
+\point{AMIP sensitivity does not vanish as $N \rightarrow \infty$}
+%
+Standard results for OLS give that $S_X \plim \sigma_x^2$ and $\hat\varepsilon_n -
+\varepsilon_n \plim 0$. So $N \infl_n - \sigma_x^{-2} x_n \varepsilon_n \plim
+0$. Consequently, the empirical distribution of $N \infl_n$ converges to a
+non-degenerate distribution with finite variance.  Let $q_\alpha$ denote the
+$\alpha$-th quantile of the distribution of the random variable $\sigma_x^{-2}
+x_1 \varepsilon_1$.  Since $x_n$ and $\varepsilon_n$ are independent and
+$\expect{}{\varepsilon_n} = 0$, and about
+half of the $\varepsilon_n$ will be negative, we expect about half of the
+influence scores to be negative, and that $q_\alpha < 0$ for small $\alpha$. 
+So for $\alpha \ll 1/2$, with high probability
+at least $\alpha N$ influence scores are negative. Then, by \eqref{w_approx_opt}
+and Slutsky's theorem, we have
+%
+\begin{align*}
+%
+\thetafunlin(\w^*) -
+\thetafunhat
+= -\sum_{n=1}^{\lfloor \alpha N \rfloor} \infl_{(n)}
+= - \frac{1}{ N}
+\sum_{n=1}^{\lfloor \alpha N \rfloor} S_X^{-1} (\hat\varepsilon x)_{(n)}
+\plim
+\expect{-\frac{x_1 \varepsilon_1}{\sigma_x^2}
+               \ind{\frac{x_1 \varepsilon_1}{\sigma_x^2} \le q_\alpha}}.
+%
+\end{align*}
+%
+The right hand side of the preceding display is strictly positive for $q_\alpha
+< 0$.  So, for fixed
+$\alpha$, we expect that AMIP sensitivity does not vanish as $N \rightarrow
+\infty$.\footnote{As desired, though, the expectation does go to zero as $\alpha
+\rightarrow 0$ since $\expect{\abs{x_1 \varepsilon_1}} < \infty$.}
+
+
+\point{AMIP non-robustness is not due only to misspecification}
+%
+Our simulations are well specified. Yet we see from \figref{sim-comb-normal}
+that different cases can still be robust or non-robust under various robustness
+cut-offs---according to their differing signal-to-noise ratios.
+
+Asymptotically as $N \rightarrow \infty$, even in a well-specified model, we in
+fact expect AMIP non-robustness at any $\alpha$ for a sufficiently small
+$\abs{\theta_0}$. The limiting value of the AMIP sensitivity does not depend on
+$\theta_0$.  Thus, as $N \rightarrow \infty$, our quantity of interest (for
+changing the sign of the estimator) will be AMIP non-robust with high
+probability if and only if $\abs{\theta_0} < \expect{-\frac{x_1
+\varepsilon_1}{\sigma_x^2} \ind{\frac{x_1 \varepsilon_1}{\sigma_x^2} \le
+q_\alpha}}$.  If we are interested in the sign of $\theta_0$, and
+$\abs{\theta_0}$ is small relative to the tail means of $\sigma_X^{-2} x_1
+\varepsilon_1$, then the problem will be AMIP non-robust with probability
+approaching one, no matter how large $N$ is---despite the fact that the model is
+correctly specified and there are no abnormalities in the data.
+
+
+\point{Though both are scaled by the noise, standard errors are different
+from---and typically smaller than---AMIP sensitivity}
+\pointlabel{ols_se_not_amip}
+%
+In what may seem at first like a remarkable coincidence, the variance of the
+limiting distribution of $N \infl_n$ (which determines AMIP sensitivity---see
+\eqref{taylor_approx}) is the same as the variance of the limiting distribution
+of our quantity of interest $\sqrt{N}(\thetahat - \theta_0)$ (which determines
+classical standard errors). The two distributions are not the same---the
+limiting distribution of $N \infl_n$ is not, in general, normal---but they
+have the same scale.  In particular, compare the noise limit in
+\eqref{ols_limit_of_noise} with the following limit, which follows by standard
+results for OLS.
+%
+\begin{align*}
+%
+\quad
+\sqrt{N}(\thetahat - \theta_0) \dlim
+\mathcal{N}\left(0, \frac{\sigma_\varepsilon^2}{\sigma_x^2} \right).
+%
+\end{align*}
+%
+As we discuss below in \secpointref{amip_decomposition}{noise}
+and \secpointref{influence_function}{scale_via_influence}, this equality is no
+coincidence, but a general (and well-known) relationship between influence
+scores and the limiting distributions of quantities of interest.
+
+For large $N$, use of standard errors will admit the hypothesis that $\theta_0$
+might be $0$ whenever $\abs{\theta_0} < \frac{1.96}{\sqrt{N}}
+\frac{\sigma_\varepsilon}{\sigma_x}$. Thus, for every $\theta_0 \ne 0$, using
+standard errors always rejects $\theta_0 = 0$ for sufficiently large $N$.
+% \footnote{Rejecting the null for all $\theta_0 \ne 0$
+% is typically considered a desirable feature of hypothesis testing, as it implies
+% that hypothesis testing is consistent against all alternatives.  When the model
+% is correct and the analyzed population the precise population of interest, this
+% desideratum is sensible.  However, as we argue elsewhere, many contemporary
+% analyses deviate meaningfully from the exact model, and so rejecting every
+% hypothesis other than the probability limit may actually be undesirable.}
+By contrast, as we saw above, using the AMIP will admit a change large enough to
+move $\thetahat$ to $0$ whenever
+%
+\begin{align*}
+%
+\abs{\theta_0} \le
+\left(
+\expect{-\frac{x_1}{\sigma_x} \frac{\varepsilon_1}{\sigma_\varepsilon}
+   \ind{\frac{x_1 }{\sigma_x} \frac{\varepsilon_1}{\sigma_\varepsilon}
+    \le \frac{\sigma_x}{\sigma_\varepsilon} q_\alpha
+   }}
+   \right)
+   \frac{\sigma_\varepsilon}{\sigma_x}
+   \ne \frac{1.96}{\sqrt{N}}
+   \frac{\sigma_\varepsilon}{\sigma_x}.
+%
+\end{align*}
+%
+Thus, we see that both the AMIP sensitivity and standard errors admit larger
+possible values for $\thetahat$ when the limiting value $\abs{\theta_0} /
+(\sigma_\varepsilon / \sigma_x)$ of the signal-to-noise ratio is large. But
+AMIP sensitivity is determined by the tail mean of the standardised influence
+scores, and standard errors are determined by a quantity that goes to zero as $N
+\rightarrow \infty$. Thus AMIP sensitivity is distinct from, and typically
+larger than, standard errors. The tail behavior of the unit-variance random
+variable $\frac{x_1}{\sigma_x} \frac{\varepsilon_1}{\sigma_\varepsilon}$ is
+exactly the shape we introduced at the start of \secref{why}. The shape captures
+the scale-independent shape of the tails of the distribution of the influence
+scores; see \secpointref{amip_decomposition}{shape} below for a detailed and
+general analysis.
+
+
+\point{Our approximation is accurate for small $\alpha$}
+\pointlabel{ols_small_alpha}
+%
+The expression for
+$\thetahat(\w)$ depends on two terms, $\left(\meann \w_n x_n^2 \right)^{-1}$ and
+$\meann \w_n y_n x_n$, both of which are uniformly smooth functions of $\w / N$
+with high probability for sufficiently small $\vnorm{\w - \onevec}_2 / N$.  As a
+consequence of smoothness, we expect a linear approximation formed at $\w =
+\onevec$ to be accurate when $\vnorm{\w - \onevec}_2 / N$ is small.  And when
+$\w$ contains no more than $\lfloor \alpha N \rfloor$ zeros and the rest ones,
+we have that $\vnorm{\w - \onevec}_2 / N \le \alpha$, so we expect a linear
+approximation to be accurate when $\alpha$ is small. We make this intuition
+precise and general in \secref{accuracy} below.
+
+We check the accuracy of the approximation empirically in
+\figref{sim-comb-normal}. For the right hand plot in \figref{sim-comb-normal},
+we fixed $\sigma_\varepsilon = \SimAccSigeps$ and $\sigma_x = \SimAccSigx$. We
+computed the Approximate Most Influential Set for a range of left-out
+proportions $\alpha$ from $0$ to $\SimAccPercentMax \%$.  For each $\alpha$, we
+computed the linear approximation, re-ran the regression to compute the actual
+change, and computed the error of the linear approximation as the difference of
+the two.  The right panel of \figref{sim-comb-normal} shows how the relative
+error of the approximation vanishes for small $\alpha$, and that, qualitatively,
+the approximation is very good for removal proportions less than $2.5\%$.

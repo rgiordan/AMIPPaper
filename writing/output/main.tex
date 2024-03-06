@@ -1,0 +1,296 @@
+%%%%%%%%%%%%%%%%%%%%
+% Headers
+
+
+\documentclass[webpdf,contemporary,small,namedate]{oup-authoring-template}% JRSSB
+%\documentclass[unnumsec,webpdf,contemporary,small,namedate]{oup-authoring-template}% JRSSB
+%\documentclass[namedate,webpdf,traditional,small]{oup-authoring-template}
+%\documentclass[english,12pt]{article}\usepackage{lmodern} % For arxiv
+
+
+%\usepackage[colorinlistoftodos,prependcaption,textsize=tiny,textwidth=0.8in]{todonotes}
+%\usepackage[disable]{todonotes}
+
+\usepackage{etoolbox}
+\newbool{arxiv}
+
+\boolfalse{arxiv} % For journal submission
+%\booltrue{arxiv}   % For arxiv
+
+\usepackage{xr-hyper}
+
+\notbool{arxiv}{
+    % For the journal
+    % \RequirePackage[colorlinks,
+    %                 citecolor=blue,linkcolor=blue,urlcolor=blue,
+    %                 pagebackref]{hyperref}
+    \onecolumn % for one column layouts
+    \theoremstyle{thmstyleone}%
+
+} {
+    % For arxiv
+    % line numbers for easy editing
+    \usepackage{lineno}
+    \usepackage{setspace}
+    \onehalfspacing
+    \makeatother
+    \usepackage[unicode=true, pdfusetitle,
+    bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+    breaklinks=true,pdfborder={0 0 0},backref=false]
+    {hyperref}
+
+    \usepackage[a4paper]{geometry}
+    \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,
+              rmargin=2.5cm,columnsep=1cm}
+
+    \usepackage[titletoc,title]{appendix}
+}
+
+% General latex header commands
+% Documentation
+% http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/refstyle/refstyle.pdf
+
+% Note that refstyle needs to be before amsmath for arxiv as of 2023/07/19
+% https://tex.stackexchange.com/questions/672975/refstyle-is-conflicted-with-amsmath
+\usepackage{refstyle}
+\usepackage{varioref} % Use refstyle instead of varioref directly.
+
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{graphicx}
+\usepackage{bbm}
+\usepackage{subfigure}
+\usepackage{fancyvrb}
+\usepackage{bm}
+\usepackage{lscape}
+\usepackage{multirow}
+\setcounter{secnumdepth}{10}
+\usepackage[authoryear]{natbib}
+\bibliographystyle{apalike}
+\usepackage{xcolor}
+\usepackage{array,booktabs} % For nice tables
+
+\usepackage{xargs}[2008/03/08] % For newcommandx
+\usepackage{mathrsfs} % For mathscr
+
+% For strikout command (\sout)
+\usepackage[normalem]{ulem}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\usepackage{dcolumn}
+\usepackage{lscape}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{array}
+
+
+\input{_math_defs}
+\input{_reference_defs}
+\input{_knitr_header}
+
+
+\newbool{showlabels}
+%\booltrue{showlabels} % Show the references in the text, it is so nice
+\boolfalse{showlabels}
+
+\ifbool{showlabels}{
+    \usepackage[outer]{showlabels}
+    \renewcommand{\showlabelfont}{\small\color{red}}
+    \usepackage{rotating}
+    \renewcommand{\showlabelsetlabel}[1]
+    {\begin{turn}{-70}\showlabelfont #1\end{turn}}
+}
+
+%\usepackage{amsmath}
+
+% \usepackage{pdfpages}
+% \usepackage{draftwatermark}
+% \SetWatermarkText{DRAFT ONLY: DO NOT CITE}
+% \SetWatermarkScale{0.3}
+
+% force footnotes onto single page
+\interfootnotelinepenalty=10000
+
+% Load the macros for the knitr-generated tables and graphics.
+\input{figures_knitr}
+\DefineMacros{}
+
+% End of headers.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+\title{An Automatic Finite-Sample Robustness Metric:
+When Can Dropping a Little Data Make a Big Difference?}
+
+
+\ifbool{arxiv}{
+    \author{Tamara Broderick,
+            Ryan Giordano\thanks{Equal contribution primary author}, and
+            Rachael Meager\thanks{Equal contribution primary author}
+        \footnote{
+            Corresponding Author: Rachael Meager, reachable at \texttt{r.meager@lse.ac.uk}.
+        } % footnote
+    } % author
+
+}{ % end arxiv, begin journal
+    % \title{An Automatic Finite-Sample Robustness Metric: When Can Dropping a Little Data Make a Big Difference?}
+    % \runtitle{When can Dropping a Little Data Make a Big Difference?}
+
+    \journaltitle{JRSS-B}
+    \DOI{DOI HERE}
+    \copyrightyear{2023}
+    \pubyear{2024}
+    \access{Advance Access Publication Date: Day Month Year}
+    \appnotes{Paper}
+    
+    \firstpage{1}
+
+    \author[1,$\dagger$]{Ryan Giordano \ORCID{0000-0002-5686-9210}}
+    \author[2,$\dagger$]{Rachael Meager}
+    \author[3]{Tamara Broderick \ORCID{0000-0003-4704-5196}}
+
+    \authormark{Giordano, Meager, \& Broderick}
+     
+    \address[1]{\orgdiv{Statistics}, \orgname{University of California Berkeley}, 
+                \orgaddress{\state{CA}, \country{USA}}}
+    \address[2]{\orgdiv{Economics}, \orgname{University of New South Wales}, 
+                \orgaddress{\state{NSW}, \country{Australia}}}
+    \address[3]{\orgdiv{EECS}, \orgname{Massachusetts Institute of Technology}, 
+                \orgaddress{\state{MA}, \country{USA}}}
+
+    \corresp[$\dagger$]{Equal contribution primary authors.\\}
+    %\corresp[$\ast$]{Corresponding authors. \href{r.meager@unsw.edu.au}{r.meager@unsw.edu.au}\\}
+
+     % Make sure this footnote matches the footnote text above!
+    % \support{
+    % Tamara Broderick and Ryan Giordano were supported in part by an
+    % Office of Naval Research Early Career Grant, an NSF CAREER Award, and an
+    % Army Research Office YIP Award.  We thank Avi Feller, Jesse Shapiro, Emily
+    % Oster, Michael Kremer, Peter Hull, Tetsuya Kaji, Heather Sarsons, Kirill
+    % Borusyak, Tin Danh Nguyen and the authors of all of our applications for
+    % their insightful comments and suggestions. All mistakes are our own.
+
+    % Corresponding Author: Rachael Meager, reachable at \texttt{r.meager@lse.ac.uk}.
+    % }
+    \abstract{\input{abstract}}
+
+    \keywords{Influence function, Local robustness, Z-estimators, Sensitivity}
+
+    % After publication
+    % \received{Date}{0}{Year}
+    % \revised{Date}{0}{Year}
+    % \accepted{Date}{0}{Year}
+} % JRSSB
+
+
+\maketitle
+\ifbool{arxiv}{
+    \abstract{\input{abstract}}
+}
+
+%\newpage
+\section{Introduction}
+\seclabel{introduction}
+\input{introduction}
+
+\section{A proposed measure of sensitivity to dropping small data subsets}
+\seclabel{metric}
+    \seclabel{MIP}
+    \input{MIP}
+
+    \subsection{A Taylor series approximation to dropping data}
+    \seclabel{taylor_series}
+    \input{taylor_series}
+
+    \subsection{A tractable approximation}
+    \seclabel{AMIP}
+    \input{AMIP}
+
+    \subsection{Example functions of interest}
+    \seclabel{function_examples}
+    \input{function_examples}
+
+    \subsection{A real-world OLS regression example}
+    \seclabel{linear_regression}
+    \input{introductory_regression_example}
+
+\section{Underlying theory and interpretation} \seclabel{why}
+    \input{theory_intro}
+
+    \subsection{Theory and interpretation for Ordinary Least Squares}
+    \seclabel{influence_function_ols}
+    \input{influence_ols_example}
+
+    \subsection{Theory and interpretation for general Z-estimators}
+    \seclabel{influence_function}
+    \input{influence_function}
+
+    \subsection{Accuracy of the approximation}
+    \seclabel{accuracy}
+    \input{approximation_accuracy}
+
+    \subsection{Related work}
+    \seclabel{related_work}
+    \input{related_work}
+
+
+\section{Applied experiments} \seclabel{examples}
+
+    \subsection{The Oregon Medicaid experiment}
+    \seclabel{example_medicaid}
+    \input{example_medicaid}
+
+    \subsection{Cash transfers}
+    \seclabel{example_transfers}
+    \input{example_transfers}
+
+    \subsection{Seven RCTs of microcredit: Linear regression analysis}
+    \seclabel{example_microcredit_linear}
+    \input{example_microcredit_linear}
+
+    \subsection{Seven RCTs of microcredit: Bayesian hierarchical tailored mixture model}
+    \seclabel{example_microcredit_hierarchical}
+    \input{example_microcredit_hierarchical}
+
+
+\section{Conclusion}\seclabel{conclusion}
+\input{conclusion}
+
+
+% \boolfalse{arxiv} {
+\section{Acknowledgments}
+\input{support}
+% }
+
+\clearpage
+\newpage
+\bibliography{robustness-lit}
+
+\clearpage
+\newpage
+\begin{appendices}
+
+
+\section{Detailed proofs}\applabel{proofs}
+\input{appendix_proofs}
+
+\section{The $\alpha$ dependence in \thmref{thetafun_accuracy} is tight}
+\applabel{tight_bound}
+\input{appendix_bound_tight}
+
+\clearpage
+\newpage
+
+% Put online stuff here when we have it, and simply pull the
+% firt N pages of the pdf for Econometrica.
+% \section{Online Supplementary Material}\applabel{online_proofs}
+
+
+\end{appendices}
+
+\end{document}

@@ -1,0 +1,69 @@
+We now establish the determinants and accuracy of AMIP robustness. We begin by
+deriving the key quantities of AMIP robustness in the simple case of correctly
+specified univariate OLS regression (\secref{influence_function_ols}). For this
+simple case, we show with theory and simulations that AMIP robustness is not
+necessarily driven by misspecification, that AMIP non-robustness does not vanish
+asymptotically, and that AMIP robustness is distinct from standard errors. Next,
+we formally extend these conclusions to general Z-estimators in
+\secref{influence_function}.  Finally, in \secref{accuracy}, we establish
+conditions under which the approximation is provably uniformly accurate for
+small $\alpha$, both in finite sample and asymptotically.
+
+We will see that a central equation in our understanding of AMIP robustness is
+its decomposition into three key quantities: the signal, noise, and shape.
+First, the \emph{signal} $\Delta$ is the size of change in our quantity of
+interest that would reverse our substantive conclusion (see
+\secref{function_examples} above). Large values of the signal $\Delta$ indicate
+that large changes are needed to make a different decision.  Second, the
+\emph{noise} $\inflscale$ is defined by
+%
+\begin{align}\eqlabel{inflscale_def}
+%
+\inflscale^2 := \meann (N \infl_n)^2
+%
+\end{align}
+%
+We call $\inflscale$ the noise because $\inflscale^2$ is typically a consistent
+estimator of the variance of the limiting distribution of $\sqrt{N}
+\thetafun(\thetahat)$, a fact that will follow below from the relationship
+between AMIP robustness, robust standard error estimators, and the influence
+function (see \secpointref{amip_decomposition}{noise} or, more
+generally, \secpointref{influence_function_for_real}{scale_via_influence}).
+Third, the \emph{shape} $\shape$ is defined as
+%
+\begin{align}\eqlabel{shape_def}
+%
+\shape := -\frac{1}{N}
+\sum_{n=1}^{\lfloor \alpha N \rfloor} \frac{N \infl_{(n)}}{\inflscale}
+\ind{\infl_{(n)} < 0},
+%
+\end{align}
+%
+where $\infl_{(n)}$ refers to the $n$-th order statistic of the influence
+scores, and $\ind{\cdot}$ denotes the indicator function taking value $1$ when
+its argument is true and $0$ otherwise. The shape $\shape$ depends in a
+complicated way on the shape of the tail of the distribution of the influence
+scores, but we show that $0 \le \shape \le \sqrt{\alpha(1 - \alpha)}$ with
+probability one, and that $\shape$ converges in probability to a nonzero
+constant under standard assumptions (see
+\secpointref{amip_decomposition}{shape}).  Given these three quantities, we will
+show in \secpointref{amip_decomposition}{amip_decomposition} that
+%
+\begin{align} \eqlabel{robustness_three_parts}
+%
+\textrm{An analysis is AMIP non-robust }\quad\Leftrightarrow\quad
+\frac{\Delta}{\inflscale} \le \shape.
+%
+\end{align}
+%
+We refer to the quantity $\Delta / \inflscale$ as the \emph{signal-to-noise ratio}.
+For a given $\alpha$, \eqref{robustness_three_parts} suggests that it is the
+signal-to-noise ratio that primarily determines AMIP robustness. Additionally, this
+decomposition allows us to succinctly compare AMIP robustness to standard errors
+and gross-error robustness, as well as to analyze the large-$N$ behavior of
+AMIP robustness.
+
+This section will use the following notation.  Let the symbol $\plim$ denote
+convergence in probability, and $\dlim$ denote convergence in
+distribution, both as $N \rightarrow \infty$.  Let $\vnorm{\cdot}_{op}$ denote
+the operator norm of a matrix.

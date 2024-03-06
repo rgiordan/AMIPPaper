@@ -1,0 +1,7 @@
+The microcredit project repo officially is here:
+https://www.openicpsr.org/openicpsr/project/155821/version/V1/view 
+
+The data and associated data construction script (for documentation purposes) is here:
+https://www.openicpsr.org/openicpsr/project/155821/version/V1/view?path=/openicpsr/155821/fcr:versions/V1/aggregating-dist-TEs/data&type=folder
+
+This analysis requires `microcredit_project_data.RData` to be in the current folder.

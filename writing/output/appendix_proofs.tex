@@ -1,0 +1,373 @@
+
+
+\begin{lem}\lemlabel{normalized_sum_bound}
+%
+\sloppy
+Let $\chi_1, \ldots, \chi_N$ be real-valued scalars with $\meann \chi_n^2 = 1$.
+Then $\max_{\w \in W_\alpha} \meann \abs{\w_n - 1}\chi_n \le \sqrt{\alpha}$.
+%
+\begin{proof}
+%
+Without loss of generality, let the $\chi_n$ be unique (if they are not,
+add an arbitrarily small amount of jitter to break ties), and let $q_{1 -
+\alpha}$ denote their $\lceil (1 - \alpha) N \rceil$-th largest value.
+The maximum $\max_{\w \in W_\alpha} \meann \abs{\w_n - 1} \chi_n$ is
+achieved at $\w$ which sets to zero the weights of all $\{n : \chi_n \ge
+q_{1-\alpha}\}$, so
+%
+\begin{align*}
+%
+\max_{\w \in W_\alpha} \meann \abs{\w_n - 1}\chi_n =
+\meann \ind{\chi_n \ge q_{1 - \alpha}} \chi_n.
+%
+\end{align*}
+%
+Let $\hat{F}_{\chi}$ denote the empirical distribution on $\chi_n$
+conditional on the data $\d_n$, and note that $q_{1 - \alpha}$ is fixed
+in $\hat{F}_{\chi}$.  Applying Cauchy-Schwartz to the preceding display
+with the distribution $\hat{F}_{\chi}$ gives
+%
+\begin{align*}
+%
+%\MoveEqLeft
+\meann \ind{\chi_n \ge q_{1 - \alpha}} \chi_n
+%\\&
+\le \sqrt{\meann \ind{\chi_n \ge q_{1 - \alpha}}^2}
+\sqrt{\meann \chi_n^2} =
+\sqrt{\frac{\lfloor N \alpha \rfloor}{N}}
+\le \sqrt{\alpha},
+%
+\end{align*}
+%
+since $\meann \chi_n^2 = 1$ and at most $\lfloor \alpha N \rfloor$
+points are greater than $q_{1-\alpha}$.
+%
+\end{proof}
+%
+\end{lem}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The following lemma shows that \assuref{ij_assu} satisfies Condition 1 of
+\citet{giordano:2019:swiss}.
+
+\begin{lem}\lemlabel{alpha_complexity}
+%
+Let $W_\alpha^* := \{ \onevec + t (\w - \onevec): \w \in W_\alpha, t \in [0, 1] \}$
+Under \assuref{ij_assu},
+%
+\begin{align*}
+%
+\max_{\w \in W_\alpha^*}
+\sup_{\theta \in \thetadom}
+    \vnorm{\meann (\w_n - 1) G(\theta, \d_n)}_1   \le&
+                \sqrt{D} \cgh \sqrt{\alpha} \quad\textrm{and}\\
+%
+\max_{\w \in W_\alpha^*}
+\sup_{\theta \in \thetadom}
+    \vnorm{\meann (\w_n - 1) H(\theta, \d_n)}_1   \le&
+                \sqrt{D} \cgh \sqrt{\alpha}.
+%
+\end{align*}
+%
+\begin{proof}
+%
+We prove the result for $G(\theta, \d_n)$; the proof for $H(\theta, \d_n)$
+follows analogously.  By the triangle inequality and the relationship between
+$\vnorm{\cdot}_2$ and $\vnorm{\cdot}_1$,
+%
+\begin{align*}
+%
+\vnorm{\meann (\w_n - 1) G(\theta, \d_n)}_1 \le
+\sqrt{D} \cgh \meann \abs{\w_n - 1} \frac{\vnorm{G(\theta, \d_n)}_2}{\cgh}.
+%
+\end{align*}
+%
+Apply \lemref{normalized_sum_bound} with $\chi_n := \frac{\vnorm{G(\theta,
+\d_n)}_2}{\cgh}$ to control the maximum of the sum over $W_\alpha$.  Finally,
+the results extends to $W_\alpha^*$ since
+%
+\begin{align*}
+%
+\max_{\w \in W_\alpha^*} \meann \abs{\w_n - 1}\chi_n
+=&
+\max_{t \in [0,1]} \max_{\w \in W_\alpha}
+    \meann \abs{t (\w_n - 1)} \chi_n =
+\max_{\w \in W_\alpha} \meann \abs{(\w_n - 1)} \chi_n.
+%
+\end{align*}
+%
+\end{proof}
+%
+\end{lem}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We need the following lemma to extend the result of \citet{giordano:2019:swiss},
+Theorem 1 to smooth functions.
+
+\begin{lem}\lemlabel{derivative_smooth}
+%
+Let \assuref{ij_assu, thetafun_smooth} hold. For sufficiently small $\alpha$,
+there exists a constant $C_b < \infty$ such that, for any $a \in \mathbb{R}^N$,
+%
+\begin{align*}
+%
+\max_{\w \in W_\alpha^*}
+\vnorm{\left(
+    \fracat{d \thetahat(\w)}{ d\w^T}{\w} -
+    \fracat{d \thetahat(\w)}{ d\w^T}{\onevec}
+    \right) a }_2
+\le C_b \frac{\vnorm{a}_2}{\sqrt{N}} \sqrt{\alpha}.
+%
+\end{align*}
+%
+\begin{proof}
+%
+As in the proof of \thmref{thetafun_accuracy}, for the remainder of the proof
+assume that $\alpha \le \frac{\Delta^2}{D\cgh^2}$, and observe that Assumptions
+1-5 and Condition 1 of \citet{giordano:2019:swiss} are satisfied.
+%
+For the duration of this proof, define the shorthand notation
+%
+\begin{align*}
+%
+H(\w) := \meann \w_n H(\thetahat(\w), d_n)
+\quad\textrm{and}\quad
+G(\w) := \meann a_n G(\thetahat(\w), d_n).
+%
+\end{align*}
+%
+Then, by the indicated results from \citet{giordano:2019:swiss},
+%
+\begin{align*}
+%
+\MoveEqLeft
+\vnorm{\left(
+    \fracat{d \thetahat(\w)}{ d\w^T}{\w} -
+    \fracat{d \thetahat(\w)}{ d\w^T}{\onevec}
+    \right) a }_2
+\\={}&
+\vnorm{-H(\w)^{-1} G(\w) + H(\onevec)^{-1} G(\onevec)}_2
+    \quad \textrm{(Proposition 4)}
+\\\le{}&
+\vnorm{-(H(\w)^{-1} - H(\onevec)^{-1} ) G(\w)}_2 +
+\vnorm{ H(\onevec)^{-1} ( G(\onevec) - G(\w))}_2
+%
+\\\le{}&
+\vnorm{-(H(\w)^{-1} - H(\onevec)^{-1} ) G(\w)}_2 + \cop \delta.
+    \quad \textrm{(Condition 1, Assumption 2)}
+%
+\end{align*}
+%
+Then,
+%
+\begin{align*}
+%
+\MoveEqLeft
+\vnorm{(H(\w)^{-1} - H(\onevec)^{-1} ) G(\w)}_2
+\\={}&
+\vnorm{ H(\w)^{-1} \left(H(\onevec) -  H(\w)\right) H(\onevec)^{-1} G(\w)}_2
+\\\le{}&
+2\cop^2 \vnorm{\left(H(\onevec) -  H(\w)\right) G(\w)}_2
+\quad\textrm{(Assumption 2, Lemma 6)}
+\\\le{}&
+2\cop^2 \sqrt{D} (1 + D C_w L_h \cop) \delta \vnorm{G(\w)}_2
+\quad\textrm{(Lemma 5, Matrix norms)}
+\\={}&
+2\cop^2 \sqrt{D} (1 + D C_w L_h \cop) \delta
+     \vnorm{\meann a_n G(\thetahat(\w), d_n)}_2
+\\\le{}&
+2\cop^2 \sqrt{D} (1 + D C_w L_h \cop) \delta
+     \cgh \frac{\vnorm{a}_2}{\sqrt{N}}.
+\quad\textrm{(Assumption 3, Cauchy-Schwartz)}
+%
+\end{align*}
+%
+Combining, and using our \lemref{alpha_complexity} to give $\delta = \sqrt{D}
+\cgh \sqrt{\alpha}$, gives the desired result.
+%
+\end{proof}
+%
+\end{lem}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{Proof of \thmref{thetafun_accuracy}.}
+%
+\sloppy For the duration of the proof, define the linear approximation
+$\thetalin(\w) := \thetahat + \fracat{\dee\thetahat(\w)}{\dee\w^T}{\onevec}(\w -
+\onevec)$. \Assuref{ij_assu} is equivalent to Assumptions 1-4 of
+\citet{giordano:2019:swiss}, and \lemref{alpha_complexity} satisfies Condition 1
+of \citet{giordano:2019:swiss} with $\delta = \sqrt{D} \cgh \sqrt{\alpha}$.
+Assumption 5 of \citet{giordano:2019:swiss} is satisfied for $W_\alpha$ with
+$C_w = 1$. Define, as in \citet{giordano:2019:swiss}, $\cij := 1 + D \lh \cop$
+and $\Delta := \min\left\{\Delta_\theta \cop^{-1}, \frac{1}{2}\cop^{-1}\cij^{-1}
+\right\}$, So Lemma~3 and Theorem~1 of \citet{giordano:2019:swiss} give,
+respectively, that
+%
+\begin{align}
+%
+\max_{\w \in W_\alpha^*}
+    \vnorm{\thetahat(\w) - \thetahat}_2 \le{}& \cop \sqrt{D} \cgh \sqrt{\alpha}
+\quad \textrm{and}  \eqlabel{theta_diff_bound} \\
+%
+\alpha \le
+\frac{\Delta^2}{D\cgh^2} \quad\Rightarrow\quad
+%
+\max_{\w \in W_\alpha^*}\vnorm{\thetalin(\w) - \thetahat(\w)}_2
+    \le{}& 2 \cop^2 \cij D \cgh^2 \alpha. \eqlabel{theta_accuracy_bound}
+%
+\end{align}
+%
+For the remainder of the proof assume that $\alpha \le
+\frac{\Delta^2}{D\cgh^2}$ so that \eqref{theta_accuracy_bound} applies.
+
+For any $\w \in W_\alpha$, define $\omega(t) := \onevec + t (\w - \onevec)  \in
+W_\alpha^*$. By the fundamental theorem of calculus,
+%
+\begin{align}\eqlabel{thetafun_integral}
+%
+\thetafun(\thetahat(\w), \w) - \thetafunhat = \int_0^1
+    \fracat{\dee \thetafun(\omega(t))}{\dee t}{t}dt
+=
+\int_0^1
+    \left( \fracat{\dee \thetafun(\omega(t))}{\dee t}{t} -
+           \fracat{\dee \thetafun(\omega(t))}{\dee t}{1}\right)\dee t +
+    \fracat{\dee \thetafun(\omega(t))}{\dee t}{1}.
+%
+\end{align}
+%
+where, by the chain rule,
+%
+\begin{align*}
+%
+\fracat{\dee \thetafun(\omega(t)))}{\dee t}{t}
+={}&
+\fracat{\partial \thetafun(\theta, \omega(t))}
+       {\partial \theta^T}{\thetahat(\omega(t))}
+\fracat{\dee \thetahat(\w)}{\dee \w^T}{\omega(t)} (\w - \onevec) +
+\fracat{\partial \thetafun(\thetahat(\omega(t)), \w)}
+       {\partial \w^T}{\omega(t)} (\w - \onevec).
+%
+\end{align*}
+
+It will be useful to adopt a specific ``big O'' notation for the remainder of the
+proof, by which we mean the following.  If we write $x = O(\sqrt{\alpha})$ for
+some quantity $x$, we mean that there exists a constant $C$, available as a
+closed-form function of constants defined in \assuref{ij_assu, thetafun_smooth},
+such that $x \le C \sqrt{\alpha}$ for all $\alpha \le \frac{\Delta^2}{D\cgh^2}$.
+An analogous notation meaning is given to $x = O(\alpha)$.  This ``big O''
+notation can be manipulated in the usual ways \citep{bruijn:1981:asymptotic}.
+
+To begin with, by definition of $W_\alpha$, we have $\max_{\w \in W_\alpha}
+\meann (\w_n - 1)^2 = \frac{\lfloor \alpha N \rfloor}{N} \le \alpha$, so
+$\max_{\w \in W_\alpha} \vnorm{(\w - \onevec) / \sqrt{N}}_2 \le \sqrt{\alpha}$.
+
+Next, observe that \eqref{theta_diff_bound, theta_accuracy_bound} together imply
+that
+%
+\begin{align*}
+%
+\max_{\w \in W_\alpha^*}\vnorm{\fracat{\dee\thetahat(\w)}{\dee\w^T}{\onevec}(\w -
+\onevec)}_2
+\le \max_{\w \in W_\alpha^*} \vnorm{\thetalin(\w) - \thetahat(\w)}_2 +
+\max_{\w \in W_\alpha^*} \vnorm{\thetahat(\w) - \thetahat}_2
+= O(\sqrt{\alpha}).
+%
+\end{align*}
+%
+By \lemref{derivative_smooth} below, we have that
+%
+\begin{align*}
+%
+\max_{t \in [0,1]}
+\max_{\w \in W_\alpha^*}
+\vnorm{\left(
+    \fracat{\dee \thetahat(\w)}{ \dee \w^T}{\omega(t)} -
+    \fracat{\dee \thetahat(\w)}{ \dee \w^T}{\onevec}
+    \right) (\w - \onevec) }_2
+\le C_b \frac{\vnorm{\w - \onevec}_2}{\sqrt{N}} \sqrt{\alpha}
+= O(\alpha).
+%
+\end{align*}
+%
+Combining the previous two displays gives, by the triangle inequality, that
+$\max_{t \in [0,1]} \max_{\w \in W_\alpha^*} \vnorm{\fracat{\dee \thetahat(\w)}{
+\dee\w^T}{\omega(t)}(\w - \onevec)}_2 = O(\sqrt{\alpha})$.
+
+Finally, by the Lipschitz property of the partial derivatives in
+\assuref{thetafun_smooth}, we have that
+%
+\begin{align*}
+%
+\max_{t \in [0,1]} \vnorm{
+    \fracat{\partial \thetafun(\theta, \omega(t))}
+           {\partial \theta}{\thetahat(\omega(t))} -
+   \fracat{\partial \thetafun(\theta, \onevec)}
+          {\partial \theta}{\thetahat}
+}_2
+% \le L_\phi \left(
+%     \vnorm{\thetahat(\omega(t)) - \thetahat}_2 +
+%     \frac{\vnorm{\omega(t) - \onevec}_2}{\sqrt{N}}
+={}& O(\sqrt{\alpha}) \quad \textrm{and}\\
+%
+\max_{t \in [0,1]} \sqrt{N} \vnorm{
+    \fracat{\partial \thetafun(\thetahat(\omega(t)), \w)}
+           {\partial \w}{\omega(t)} -
+    \fracat{\partial \thetafun(\thetahat, \w)}
+           {\partial \w}{\onevec}
+}_2 ={}& O(\sqrt{\alpha}).
+%
+\end{align*}
+%
+Again, the triangle inequality with the boundedness of the partial
+derivatives of $\phi$ at $\w = \onevec$ implies
+%
+\begin{align*}
+%
+\max_{t \in [0,1]} \vnorm{
+    \fracat{\partial \thetafun(\theta, \omega(t))}
+           {\partial \theta}{\thetahat(\omega(t))}
+}_2 \quad\textrm{and}\quad
+\max_{t \in [0,1]} \sqrt{N} \vnorm{
+    \fracat{\partial \thetafun(\thetahat(\omega(t)), \w)}
+           {\partial \w}{\omega(t)}
+}_2
+={}& O(\sqrt{\alpha}).
+%
+\end{align*}
+%
+Combining the above results gives that
+%
+\begin{align*}
+%
+\max_{t \in [0,1]} \vnorm{\fracat{d \thetafun(\omega(t))}{d t}{t}}_2
+= O(\sqrt{\alpha})
+\quad\textrm{and}\quad
+\max_{t \in [0,1]} \vnorm{
+    \fracat{\dee \thetafun(\omega(t))}{\dee t}{t} -
+    \fracat{\dee \thetafun(\omega(t))}{\dee t}{1}
+}_2  = O(\alpha),
+%
+\end{align*}
+%
+from which the desired conclusion follows by \eqref{thetafun_integral}.
+%
+\qed
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

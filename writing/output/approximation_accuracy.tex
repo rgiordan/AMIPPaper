@@ -1,0 +1,193 @@
+In \secpointref{ols_what_determines}{ols_small_alpha} we argued that our
+approximation was accurate in OLS for small $\alpha$. Now we extend that
+argument to the general case. In particular, we state sufficient conditions
+under which $\thetafunlin(\w)$ provides a good approximation to
+$\thetafun(\thetahat(\w), \w)$ for small $\alpha$ uniformly for $\w \in
+W_\alpha$.  Our key result, \thmref{theta fun_accuracy}, holds exactly in finite
+samples with bounds that are, in principal, computable. Additionally, the
+corresponding bounds can also be expected to hold with probability approaching
+one as $N \rightarrow \infty$ under standard assumptions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Controlling the residual of a Taylor series}
+
+The linear approximation we use in \eqref{taylor_approx} is a Taylor series, so
+its accuracy can be controlled by controlling the Taylor series residual.
+\citet{giordano:2019:swiss} states conditions under which the first-order Taylor
+series approximation to $\thetahat(\w)$ is accurate---precisely when using the
+derivative as given in \eqref{dtheta_dw_general}. Under additional smoothness
+assumptions on $\thetafun$, we can extend those results to our present
+\eqref{taylor_approx}.  Since the Taylor series expansion is expressed in terms
+of observable non-asymptotic quantities, the resulting error bounds hold exactly
+in finite sample and are, in principle, computable.
+
+We first state assumptions under which the linear approximation is accurate for
+the vector $\thetahat(\w)$.
+
+\begin{assu}[(\citet{giordano:2019:swiss}, Assumptions 1-4)]
+    \assulabel{ij_assu}
+%
+Let $W_\alpha$ be the set of weight vectors with no more than $\lfloor \alpha N
+\rfloor$ zeros as given by \eqref{w_alpha_def}.   Assume there exists a compact
+domain $\thetadom \subseteq \mathbb{R}^D$ containing $\thetahat(\w)$ for all $\w
+\in W_\alpha$, such that
+%
+\begin{enumerate}
+    %
+    \item For all $\theta \in \thetadom$ and all $n$, $\theta \mapsto G(\theta,
+    d_n)$ is continuously differentiable with derivative
+    %
+    \begin{align*}
+    %
+    \fracat{\partial G(\theta, \d_n)}{\partial \theta^T}{\theta}
+    =: H(\theta, \d_n).
+    %
+    \end{align*}
+    %
+    \sloppy \item For all $\theta \in \thetadom$, there exists $\cop < \infty$
+    such that
+    %
+    $\sup_{\theta \in \thetadom}\vnorm{\left( 
+        \meann H(\theta, d_n)\right)^{-1}
+    }_{op} \le \cop$.
+    %
+    \sloppy \item There exists a constant $\cgh < \infty$ such that
+    %
+    \begin{align*}
+    %
+    \sup_{\theta \in \thetadom}
+        \max\left\{\meann \vnorm{G(\theta, \d_n)}_2^2,
+              \meann \vnorm{H(\theta, \d_n)}_2^2 \right\} \le \cgh^2.
+    %
+    \end{align*}
+    %
+    \item There exists a $\Delta_\theta$ and an $\lh < \infty$ such that
+    %
+    \begin{align*}
+    %
+    \sup_{\theta: \vnorm{\theta - \thetahat}_2 \le \Delta_\theta}
+    \meann \vnorm{H(\theta, \d_n) - H(\thetahat, \d_n)}_2^2 /
+         \vnorm{\theta - \thetahat}_2^2
+    \le \lh^2.
+    %
+    \end{align*}
+    %
+\end{enumerate}
+%
+\end{assu}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Roughly speaking, \assuref{ij_assu} states that the estimating equation is
+smooth and non-singular, that the sample averages are uniformly bounded, and
+that the estimating equation's derivatives are Lipschitz.  Other than the size
+of the domain $\thetadom$, \assuref{ij_assu} does not depend on $W_\alpha$, nor
+on any asymptotic quantities; it states only (reasonable) assumptions on the
+actual problem at hand.
+
+Under \assuref{ij_assu}, we are able to apply Theorem 1 of
+\citet{giordano:2019:swiss} for $W_\alpha$ and thereby prove the uniform accuracy
+of a linear approximation to $\thetahat(\w)$ for all $\w  \in W_\alpha$.
+To extend the accuracy of an approximation of $\thetahat(\w)$ to our
+quantity of interest $\thetafun$ naturally requires smoothness assumptions
+on $\thetafun$, which we now state.
+
+\begin{assu}\assulabel{thetafun_smooth}
+%
+Define the re-scaled weights $\delta_n := \w_n / \sqrt{N}$, and assume that
+$\theta, \delta \mapsto \thetafun(\theta, \sqrt{N} \delta)$ has continuous
+partial derivatives, that the partial derivatives' $\vnorm{\cdot}_2$-norm
+evaluated at $\theta = \thetahat(\onevec)$ and $\w = \onevec$ is bounded by a
+finite constant $C_\phi$, and that the partial derivatives are Lipschitz in
+$\vnorm{\cdot}_2$ with finite constant $L_\phi$.
+%
+\end{assu}
+
+We can now state our main accuracy theorem.
+
+\begin{thm}\thmlabel{thetafun_accuracy}
+%
+Let \assuref{ij_assu, thetafun_smooth} hold. For sufficiently small $\alpha$,
+there exist constants $C_1$ and $C_2$, defined in terms of quantities given in
+\assuref{ij_assu, thetafun_smooth}, such that\footnote{ We note that the rate
+$\sqrt{\alpha}$ is determined by a simple but coarse Cauchy-Schwartz bound (see
+\lemref{alpha_complexity}).  Tighter bounds may be achievable when the random
+variables $\vnorm{G(\theta, \d_n)}_2$ and $\vnorm{H(\theta, \d_n)}_2$ are
+uniformly integrable (see, e.g., Section 2.5 of \citet{vaart2000asymptotic}). }
+%
+\begin{align}
+%
+\sup_{\w \in W_\alpha} \abs{\thetafunlin(\w) - \thetafun(\thetahat(\w), \w)}
+    \le{}& C_1 \alpha \quad \textrm{and} \quad
+\sup_{\w \in W_\alpha} \abs{\thetafun(\thetahat(\w), \w) - \thetafunhat}
+    \le{} C_2 \sqrt{\alpha}. \eqlabel{thetafun_accuracy}
+%
+\end{align}
+%
+\end{thm}
+
+When $\alpha$ is small, we expect $\alpha \ll \sqrt{\alpha}$ (for example, when
+$\alpha = 0.01$, $\sqrt{\alpha} = 0.1 \gg 0.01$), so \thmref{thetafun_accuracy}
+states that the bound in the error of our linear approximation shrinks faster
+than the bound in the function itself as $\alpha \rightarrow 0$.
+%
+In \appref{tight_bound}, we show that the dependence on $\alpha$ given in
+\thmref{thetafun_accuracy} are tight, i.e., that there exist problems for
+which the effect size and error scale as $\sqrt{\alpha}$ and $\alpha$,
+respectively, as $\alpha \rightarrow 0$.
+
+\Thmref{thetafun_accuracy} is a finite-sample result, applying exactly to the
+problem at hand.  All else equal, finite-sample results are preferable to
+asymptotic ones. Nevertheless, due to the many loose bounds employed in the
+proof, we do not expect the constants to be useful in practice. Additionally,
+Theorem 1 of \citet{giordano:2019:swiss} may in theory require $\alpha$ to be
+smaller than $1 / N$, resulting in a vacuous statement. Improving these
+shortcomings is an important avenue for future work (e.g.
+\citet{giordano2019higherorder, wilson:2020:approximate}).  But it is therefore
+useful to observe that, when uniform laws of large numbers apply to $\theta
+\mapsto \vnorm{G(\theta, \cdot)}_2$ and $\theta \mapsto \vnorm{H(\theta,
+\cdot)}_2$, and the limiting functions are also non-singular, bounded, and
+Lipschitz, then one can expect \assuref{ij_assu} to hold with high probability
+and finite constants as $N \rightarrow \infty$. A precise statement of the
+necessary conditions for such asymptotics to apply is given in Lemma 1 of
+\citet{giordano:2019:swiss}.
+
+\subsubsection{Limitations of linear approximations}
+
+In every case we examine in our applications in \secref{examples}, we manually
+re-run the analysis without the data points in the removal set $\amis{\alpha}$;
+in doing so, we find that the change suggested by the approximation is  nearly
+always achieved in practice (a notable exception is given and discussed at the
+end of \secref{example_microcredit_hierarchical}).  However, linear
+approximations are only approximations, and intuition about the potential
+weaknesses of linear approximations in general apply to our approximation.  The
+crux of \thmref{thetafun_accuracy} is that small $\alpha$ implies that $\w -
+\onevec$ is small, thus we can control the error of a linear approximation in
+$\w$ evaluated at $\onevec$.  Conversely, one would not expect the approximation
+to work well in general for large $\alpha$ and the correspondingly larger $\w -
+\onevec$.
+
+As an extreme example, consider when the linear approximation reports that there
+is no feasible way to effect a particular change; i.e., when $\aloprop{\Delta} =
+\na$ (see \defref{approx_metrics}).  Such a result may seem to imply that, no
+matter how many datapoints one removes, the estimator will not change by an
+amount $\Delta$, which is often absurd. However, such a result should be taken
+to mean that one would have to remove such a large proportion $\alpha$ of
+datapoints that the linear approximation on which we are basing the
+$\aloprop{\Delta}$ is invalid.  A more accurate interpretation of
+$\aloprop{\Delta} = \na$ is that no {\em small} proportion of points can be
+removed to produce a change $\Delta$, for if there were such a small proportion,
+the linear approximation would have discovered it.
+
+Similarly, linear approximations cannot be expected to work well near the
+boundary of parameter spaces.  For example, if the quantity of interest is a
+variance, then the true parameter is constrained to be positive, but our linear
+approximation is not. It can help to linearise the problem using unconstrained
+reparameterizations (e.g., linearly approximating the log variance rather than
+variance).  However, as we show in \secref{example_microcredit_hierarchical},
+simply transforming to an unconstrained space is still not guaranteed to produce
+accurate approximations near the boundary in the original, constrained space.

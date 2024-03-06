@@ -1,0 +1,139 @@
+
+%\subsubsection{Bayesian Hierarchical Tailored Mixture Model}
+
+In this section, we investigate a Bayesian hierarchical model, both
+demonstrating that even Bayesian analyses can exhibit considerable AMIP
+sensitivity, and showing an example of a parameter of interest for which our
+linear approximation performs badly. We specifically focus on a variational
+Bayes approximation to the tailored mixture model from
+\citet{meager2020aggregating}.  One might hope that any of the following aspects
+of the more complicated model might alleviate AMIP sensitivity: the use of
+hierarchical Bayesian evidence aggregation, the regularization from
+incorporation of priors, or the somewhat more realistic data-generating process
+captured in this specific tailored likelihood. Indeed, the approach of
+\citet{meager2020aggregating} was specifically motivated by the desire to
+capture important features of the data-generating process such as heavier tails.
+On the contrary, we find that the average  estimated effects of microcredit
+remain sensitive according to the AMIP, as we did in the simpler models of
+\secref{example_microcredit_linear}.  We also find that the linear approximation
+that underlies the AMIP performs poorly when attempting to decrease a particular
+hypervariance parameter, providing a concrete example of the limitations of our
+methodology, particularly for parameters near the boundary of the set of their
+allowable values.
+
+%%
+\subsubsection{Background}
+%%
+
+Following \citet{meager2020aggregating}, we fit a hierarchical model (hereafter
+referred to as the ``microcredit model'') to all the data from the seven
+microcredit RCTs. We model each outcome using a spike at zero and two lognormal
+tail distributions, one for the positive realizations of profit and one for the
+negative realizations. Within the model, microcredit can affect the proportion
+of data assigned to each of these three components as well as affecting the
+location and scale of the lognormal tails. There is a hierarchical shrinkage
+element to the model for each parameter. The hypervariances of the treatment
+effects are of particular interest because these capture heterogeneity in
+effects across studies and offer information about the transportability of
+results across settings.
+
+% For the remainder of this section we will focus only on
+% the treatment effect of microcredit on the location parameters of the
+% positive and negative tail distributions, which are denoted $\tau_{+}$ and
+% $\tau_{-}$ respectively.
+The models in the original paper were fit via Hamiltonian Monte Carlo (HMC) with
+the software package Stan \citep{carpenter2017stan}. It is possible to compute
+the Approximate Maximum Influence Perturbation for HMC, or for any Markov Chain
+Monte Carlo method, using the tools of Bayesian local robustness
+\citep{gustafson2000local, giordano2018covariances}, but the sensitivity of
+simulation-based estimators is beyond the scope of this paper. However, there
+are ways to estimate Bayesian posteriors via Z-estimators, such as with
+Variational Bayes (VB) techniques \citep{blei2016variational}.\footnote{The
+Laplace approximation can also be expressed as a Z-estimator.} Specifically, we
+fit the microcredit model using a variant of Automatic Differentiation
+Variational Inference (ADVI) described in \citet[Section
+5.2]{giordano2018covariances} (see also the original ADVI paper,
+\citet{kucukelbir2017advi}).  Since the posterior uncertainty estimates of
+vanilla ADVI are notoriously inaccurate, we estimated posterior uncertainty
+using linear response covariances, again following \citet[Section
+5.2]{giordano2018covariances}.\footnote{When forming the Approximate Most
+Influential Set, we approximated the sensitivity only of the posterior means to
+data removal; the linear response covariances were considered fixed.  However,
+when we report the results of re-fitting the model, we did re-calculate the
+linear response covariances at the new variational optimum.}  We verified that
+the posterior means and covariance estimates produced by our variational
+procedure and the corresponding estimates from running HMC with Stan were within
+reasonable agreement relative to the posterior standard deviation.
+
+%%
+\subsubsection{AMIP Sensitivity Results}
+%
+We first consider the effect of microcredit on the location parameter of the
+positive and negative tails of profit, given respectively by the parameters
+$\tau_{+}$ and $\tau_{-}$.  Roughly speaking, $\tau_{+}$ and $\tau_{-}$ are both
+estimating the effect of microcredit averaged across all of the seven countries
+analyzed in \secref{example_microcredit_linear}.  Our point estimates for
+$\tau_{+}$ and $\tau_{-}$ are given by their respective VB posterior means.  We
+used the linear response covariance estimates to form a 95\% posterior credible
+interval in place of confidence intervals, and consider a change ``significant''
+if the posterior credible interval does not contain zero.
+
+\MicrocreditMixtureResultsTable{}
+%
+\MicrocreditMixtureSdResultsTable{}
+
+\tableref{mcmix_re_run_table} shows the sensitivity of inference concerning
+$\tau_{+}$ and $\tau_{-}$.  We see that the microcredit model's estimates of the
+average effectiveness of microcredit remain highly sensitive to the removal of
+small percentages of the sample, despite being derived from a model that
+accounts for non-Gaussian data shape and is regularised by the priors. This
+sensitivity shows that Bayesian aggregation procedures do not necessarily
+produce AMIP-robust estimates.
+
+We next examine the sensitivity of the hypervariances, which measure the
+variability of the effect of microcredit on these tails from country to country.  Specifically,
+the parameters $\sigma_{\tau_{+}}^2$ and $\sigma_{\tau_{-}}^2$ represent the
+between-country variances of the effect of microcredit on positive and negative
+profit outcomes, respectively. The $\sigma$ parameter can be thought of as the
+scale parameter analogue of the corresponding location parameter $\tau$ from
+\tableref{mcmix_re_run_table}. The hypervariances are of particular practical
+interest because they quantify how variable the effect of microcredit might
+be; small values of the hypervariance imply that all countries respond
+similarly to microcredit, whereas large values imply that one should not
+necessarily extrapolate the efficacy of microcredit from one country to another.
+
+In order to avoid the possibility of extrapolating to negative variances, we form
+a linear approximation to our variational Bayes estimates of the posterior mean
+of $\log \sigma$.  Since $\log \sigma$ is a scale parameter measuring the
+variability from country to country of the effect of microcredit, its sign is
+not particularly meaningful, nor is it particularly interesting to ask whether
+its posterior credible interval contains zero.  Rather, we are interested in the
+magnitude of $\log \sigma$. So, to investigate robustness, we use the AMIP to
+check the approximate maximum change achievable in either direction (increasing
+or decreasing the magnitude of $\log \sigma$) by removing 0.5\% of the sample,
+about the same fraction of the data as could generate a ``significant'' sign
+change for the $\tau_{\pm}$ parameters.
+
+The results for the hypervariances, given in \tableref{mcmix_sd_re_run_table},
+represent a useful demonstration of the limitations of our linear approximation.
+We are able to find sets of datapoints which, when dropped, produce {\em
+increases} in the hypervariances, though the our linear approximation is not
+nearly as accurate as in the rest of our results above. When we attempted to
+drop points in order to decrease the hypervariances, however, the linear
+approximation failed utterly; the Approximate Most Influential Set designed to
+produce a decrease in the hypervariances instead produced a large {\em
+increase} upon refitting.
+
+Given that the hypervariances are constrained to be positive, our failure to
+produce large decreases may not be surprising. Note that the hypervariances'
+posterior expectations began very small, and that decreasing them pushes the
+posterior of the hypervariances closer to the boundary of the admissible space.
+Though the log variance may in principle take arbitrarily negative values, it
+nevertheless appears that the model exhibits strongly non-linear dependence on
+the data weights for very small variances. Designing useful diagnostics for
+detecting and explaining such deviations from nonlinearity in complex models is
+an interesting avenue for future work. In the meantime,
+\tableref{mcmix_sd_re_run_table} shows the importance, when possible, of
+checking the accuracy of the AMIP predictions by refitting the model, and of
+exercising caution when using the AMIP approximation near the boundary of the
+parameter space.

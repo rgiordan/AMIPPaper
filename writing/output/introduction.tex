@@ -1,0 +1,180 @@
+% Opening paragraph of the paper : the nutshell pitch
+Ideally, policymakers will use social science research to inform decisions that
+affect people's livelihoods, health, and well-being. Yet study samples may
+differ from the target populations of these decisions in non-random ways,
+perhaps because of practical challenges in obtaining truly random samples, or
+because populations generally differ across time and place. When these
+deviations from the ideal random sampling exercise are small, one might think
+that the empirical conclusions would still hold in the populations affected by
+policy. It therefore seems prudent to ask whether a small percentage of a
+study's sample---or a handful of data points---has been instrumental in
+determining its findings. In this paper we provide a finite-sample,
+automatically-computable metric of how dropping a small amount of data can
+change empirical conclusions. We show that certain empirical results from
+high-profile studies in economics can be reversed by removing less than 1\% of
+the sample even when standard errors are small, and we investigate why.
+
+% why would you care this thing? motivation 1: nonrandom sample construction issues
+There are several reasons to care about whether empirical conclusions are
+substantially influenced by small percentages of the finite sample. In practice,
+even if we can sample from the population of direct interest, small percentages
+of the data are missing; either surveyors and implementers cannot find these
+individuals, or they refuse to answer our questions, or their answers get lost
+or garbled during data processing. As this missingness cannot safely be assumed
+random, researchers might care whether their substantive conclusions could
+conceivably be overturned by a missing handful of data points. Similarly,
+consumers of research who are concerned about potentially non-random errors in
+sample construction at any stage of the analysis might be interested in this
+metric as a measure of the exposure of a study's conclusions to this concern.
+Conclusions that are highly influenced by a small handful of data points are
+more exposed to adverse events or errors during data analysis, including
+p-hacking, even if these errors are unintentional.
+
+% motivation 2: external validity and vagueness.
+Even if researchers could construct a perfectly random sample from a given study
+population, the target population for our policy decisions is almost always
+different from the study population, if only because the world may change in the
+time between the research and the decision. For this reason, social scientists
+often aspire to uncover generalizable or ``externally valid'' truths about the
+world and to make policy recommendations that would apply more broadly than to a
+single study population.
+
+
+% explain the metric
+In this paper, we propose to directly measure the extent to which a small
+fraction of a data sample has influenced the central claims or conclusions of a
+study. For a particular fraction $\alpha$ (e.g., $\alpha = 0.001$), we propose
+to find the set of no more than $100 \alpha \%$ of all the observations that
+effects the greatest change in an estimator when those observations are removed
+from the sample, and to report this change. For example, suppose we were to
+find a statistically-significant average increase in household consumption after
+implementing some economic policy intervention. Further suppose that, by
+dropping 0.1\% of the sample (often fewer than 10 data points), we instead find
+a statistically-significant average \emph{decrease} in consumption. Then it
+would be challenging to argue that there is strong evidence that this
+intervention would yield consumption increases in even slightly different
+populations.
+
+% explain approximation
+To quantify this sensitivity, one could consider every possible $1-\alpha$
+fraction of the data, and re-run the original analysis on all of these data
+subsets. But this direct implementation is computationally
+prohibitive.\footnote{Indeed, \citet{young2019consistency} finds it
+computationally prohibitive to re-run their analysis when leaving out every
+possible subset of two data points. To illustrate, consider an analysis that
+takes 1 second to run; checking removal of every 10 data points from a data set
+of size 1000 would take over $10^{15}$ years. See \secref{MIP} for more detail.} We
+propose a fast approximation that works for common estimators---including
+Generalised Methods of Moments (GMM), Ordinary Least Squares (OLS), Instrumental
+Variables (IV), Maximum Likelihood Estimators (MLE), Variational Bayes (VB), and
+all minimisers of smooth empirical loss (\secref{AMIP}).
+Computation of the approximation is fast, automatable, and easy to use, and we
+provide an \textsf{R} package on GitHub called
+``zaminfluence.''\footnote{\url{https://github.com/rgiordan/zaminfluence}. The
+name stands for ``Z-estimator approximate maximum influence.'' }
+
+Our approximation is based on the classical ``influence function,'' which has
+been used many times in the literature to assess sensitivity to dropping one or
+a small number of datapoints (a discussion of related work can be found in
+\secref{related_work} below).  However, prior work focused on outlier detection
+and visual diagnostics and considered small numbers of removed datapoints.  In
+contrast, we relate the effect of ablating a non-vanishing proportion of
+datapoints to classical inference, with an interest in generalizing to unseen
+populations rather than detection of gross outliers, and analyze the accuracy of
+the empirical influence function as an approximation to leaving out a fixed
+proportion of data.
+
+% we show it works
+Specifically, we show that our approximation performs well using a combination
+of theoretical analyses, simulation studies, and applied examples. We
+demonstrate theoretically that the approximation error is low when the
+percentage of the sample removed is small (\secref{accuracy}). Moreover, for the
+cost of a single additional data analysis, we can provide an exact lower bound
+on the worst-case change in an analysis upon removing $100\alpha \%$ of the data
+(\secref{exact_lower_bound}).  We check that our metric
+detects combinations of data points that reverse empirical conclusions when
+removed from real-life datasets (\secref{examples}). For example, in the Oregon
+Medicaid study \citep{finkelstein2012oregon}, we can identify a subset
+containing less than 1\% of the original data that controls the sign of the
+effects of Medicaid on certain health outcomes. In the Mexico microcredit study
+\citep{angelucci2015microcredit}, we find a single observation, out of 16,500,
+that controls the sign of the average treatment effect on household profit.
+
+% we explain what it captures / why not SEs capture this
+We investigate the source of this sensitivity when it arises, and we show that
+it is not captured in conventional standard errors. We find that a result's
+exposure to the influence of a small fraction of the sample need not reflect a
+model misspecification problem nor the presence of gross outliers. Sensitivity
+according to our metric can arise, even if the model is exactly correct and the
+data set arbitrarily large, if there is a low \emph{signal-to-noise ratio}: that
+is, if the strength of the claim (signal) is small relative to a quantity that
+consistently estimates the standard deviation of the limiting distribution of
+root-$N$ times the quantity of interest (\secref{why}). For example, in OLS this
+``noise'' is large when we have a high ratio of residual variance to regressor
+variance (\secref{influence_function_ols}). This noise can be large even when
+standard errors are small, because it does not disappear as $N$ grows. This
+result highlights the distinction between performing classical inference within
+a hypothetical perfect random resampling experiment, and attempting to
+generalise beyond the data to the world in which very small changes to the
+population are occurring over space and time.
+
+% applications show this sensitivity varies in practice
+We examine several applications from empirical economics papers and find that
+the sensitivity captured by our metric varies considerably across analyses in
+practice. In many cases, the sign and significance of certain estimated
+treatment effects can be reversed by dropping less than 1\% of the sample, even
+when the t-statistics are very large and inference is very precise; see, e.g.,
+the Oregon Medicaid randomized controlled trial (RCT) \citep{finkelstein2012oregon} in
+\secref{example_medicaid}. In \secref{example_transfers}, we examine the
+Progresa Cash Transfers RCT \citep{angelucci2009indirect} and show that trimming
+outliers in the outcome data does not necessarily reduce sensitivity. In
+\secref{example_microcredit_linear} we examine a simple two-parameter
+linear regression on seven microcredit RCTs \citep{meager2020aggregating} and,
+in \secref{example_microcredit_hierarchical}, we examine a Bayesian hierarchical
+analysis of the same data; these final two analyses show
+that neither very simple nor relatively complex Bayesian models are immune to
+sensitivity to dropping small fractions of the data.  However, not all analyses
+we examine are non-robust.  Certain results across the applications we examine
+are robust up to 5\% and even 10\% removal.
+
+% THS IS A COMPLEMENTARY METRIC, NOT DESIGNED TO REPLACE OTHER THINGS
+We recommend that researchers use our metric to complement standard errors and
+other robustness checks. Our goal is not to supplant other sensitivity analyses,
+but to provide an additional tool to be incorporated into a broader ecosystem of
+systematic stability analysis in data science \citep{yu:2013:stability}. For
+example, since our approximation is fundamentally local due to the Taylor
+expansion, practitioners may also consider global sensitivity checks such as
+those proposed by \citet{leamer1984global, leamer1985sensitivity,
+sobol2001global,saltelli2004global}, or the conventional breakdown frontiers
+approach of \citet{he1990tail, masten2020inference}.
+%
+Our method is also not a substitute for tailored robustness checks designed by
+researchers to investigate specific concerns about sensitivity of results to
+certain structures or assumptions. Applied researchers will always know more
+than statisticians about which specific threats to their empirical strategies
+are most worth investigating in order to solidify our trust in the results of
+any given analysis.  And practitioners may well benefit from robustifying their
+analysis \citep{mostellertukeydata, hansen2008robustness,chen2011sensitivity}
+even if they pass our check.  Our metric is also complementary to classical
+gross error robustness (which we take to include outlier detection and breakdown
+point analyses) \citep{belsley:1980:regression,hampel1986robustbook}. In
+particular, gross error sensitivity is designed to detect and accommodate
+arbitrary adversarial perturbations to the population distribution.
+We discuss similarities and differences between our work and other
+robustness measures in detail in \secref{related_work}.
+
+We do not recommend researchers discard results that are not robust to removal
+of a small, highly-influential subset of data. While in certain cases such
+sensitivity may be concerning for specific, contextually-determined reasons,
+there is as yet no basis for doing so in general, as we have shown that such
+sensitivity can arise even if the conventional inference is valid in the
+strictest sense. However, we do suggest that researchers adjust their
+interpretation of results which are sensitive to dropping a small fraction of
+the data as being less generally applicable to somewhat differing populations,
+and less robust to minor corruptions of their random sampling assumption. Much
+as one would interpret statistically insignificant results as a failure to
+detect an effect rather than positively detecting the absence of an effect,
+sensitive results may indicate a failure to detect a transportable effect, but
+not necessarily a failure of classical inference in itself. We do not yet
+recommend any specific alterations to common inferential procedures based on our
+metric, but we believe this direction is promising for future research.

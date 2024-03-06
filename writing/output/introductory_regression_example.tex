@@ -1,0 +1,68 @@
+% introductory_microcredit_example
+
+Before continuing, we illustrate our method with an example. Economists often
+analyze causal relationships using linear regressions estimated via ordinary
+least squares (OLS), but a researcher rarely believes the conditional mean
+dependence is truly linear. Rather, researchers use linear regression since it
+allows transparent and straightforward estimation of an average treatment effect
+or local average treatment effect. Researchers often invoke the law of large
+numbers to  justify the focus on the sample mean, and invoke the central limit
+theorem to justify the use of Gaussian confidence intervals when the sample is
+large. We now discuss an example from recent economics literature showing how,
+in practice, the omission of a very small number of data points can have outsize
+influence on regression parameters in the finite sample even when the full
+sample is large. We will study AMIP sensitivity for OLS further using simulation
+and theory in \secref{influence_function_ols} below.
+
+Consider as an example the set of seven randomised controlled trials of
+expanding access to microcredit discussed by \citet{meager2019understanding}.
+For illustrative purposes we single out the study with the largest sample size:
+\citet{angelucci2015microcredit}. This study has approximately 16,500
+households. A full treatment of all seven studies is in
+\secref{example_microcredit_linear, example_microcredit_hierarchical} along with
+tables and figures of the results discussed below.
+
+We consider the headline results on household business profit regressed on an
+intercept and a binary variable indicating whether a household was allocated to
+the treatment group or to the control group. Let $Y_{ik}$ denote the profit
+measured for household $i$ in site $k$, and let $T_{ik}$ denote their treatment
+status. We estimate the following model via OLS with the regression formula
+$Y_{ik} \sim \beta_0 + \beta_1 T_{ik}$. In the notation of
+\secref{taylor_series}, we have $\theta = (\beta_0, \beta_1)^T$, $d_{ik} =
+(Y_{ik}, T_{ik})$, and 
+$G(\theta, \d_{ik}) = (Y_{ik} -(\beta_0 + \beta_1 T_{ik})) (1, T_{ik})^T$,
+where in a slight abuse of notation we take $n=(i,k)$ to be an indexing
+of all the distinct values of the tuple $(i,k)$ observed in the dataset.
+
+We confirm the main findings of the study in estimating a non-significant
+average treatment effect (ATE) of -4.55 USD PPP per 2 weeks, with a standard
+error of 5.88. We are interested in whether we can change the sign of $\beta_1$
+from negative to positive, so we take $\thetafun(\theta) = \beta_1$. We compute
+$\infl_n$ for each data point in the sample, which takes only a fraction of a
+second in \textsf{R} using our Zaminfluence package.
+
+Examining $\inflvec$, we find that one household has $\infl_n = 4.95$; removing
+that single household should flip the sign if the approximation is accurate. We
+manually remove the data point and re-run the regression, and indeed find that
+the ATE is now 0.4 with a standard error of 3.19. Moreover, by removing 15
+households we can generate an ATE of 7.03 with a standard error of 2.55: a
+significant result of the opposite sign.
+
+How is it possible for the absence of a single household to flip the sign of an
+estimate that was ostensibly based on all the information from a sample of
+16,500?  It may be tempting to suspect the use of sample means, which are known
+to be non-robust to gross errors, or to speculate that such excess sensitivity
+is simply symptomatic of ordinary sampling noise which is captured adequately by
+standard errors.  In \secref{why} to follow, we show that such intuition is not
+correct.  On the contrary, AMIP robustness is in fact fundamentally different
+than both standard errors and classical robustness to gross errors.
+
+%
+% But sample means can be robust in the AMIP sense:
+% we find applications in which it is necessary to remove almost 10\% of the
+% sample to change the sign of a mean, and we can simulate cases in which no
+% amount of removal will change the sign (\secref{influence_function_ols}). The
+% fact that the original estimate was statistically non-significant plays a role
+% here, but it is not decisive, and we find examples of statistically significant
+% results that can be overturned by removing less than 1\% of the sample in
+% \secref{example_medicaid,example_transfers}.

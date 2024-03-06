@@ -1,0 +1,79 @@
+% define the metric in general and its specific incarnation here
+
+% description of what we're doing just beforehand
+
+Suppose we observe $N$ data points $\d_{1}, \ldots, \d_{N}$. For instance, in a
+regression problem, the $n$-th data point might consist of covariates $x_n$ and
+response(s) $y_n$, with $d_n = (x_n,y_n)$. Consider a parameter $\theta \in
+\mathbb{R}^{\P}$ of interest. Typically we estimate $\theta$ via some function
+$\thetahat$ of our data. The central claim of an empirical economics paper is
+typically focused on some attribute of $\theta$, such as the sign or
+significance of a particular effect or quantity. A frequentist analyst might be
+worried if removing some small fraction $\alpha$ of the data were to
+%
+\begin{itemize}
+\item Change the sign of an effect.
+\item Change the significance of an effect.
+\item Generate a significant result of the opposite sign.
+\end{itemize}
+%
+To capture these concerns, we define the following quantities:
+%
+\begin{defn} \deflabel{metrics}
+    %
+Let the \emph{Maximum Influence Perturbation} be the largest possible change
+induced in the quantity of interest by dropping no more than 100$\alpha$\% of
+the data.
+
+We will often be interested in the set that achieves the Maximum Influence
+Perturbation, so we call it the \emph{Most Influential Set}.
+
+And we will be interested in the minimum data proportion $\alpha \in [0,1]$
+required to achieve a change of some size $\Delta$ in the quantity of interest,
+so we call that $\alpha$ the \emph{Perturbation-Inducing Proportion}. We report
+$\na$ if no such $\alpha$ exists.
+%
+\end{defn}
+
+In general, to compute the Maximum Influence Perturbation for some $\alpha$, we
+would need to enumerate every data subset that drops no more than 100$\alpha$\%
+of the original data. And, for each such subset, we would need to re-run our
+entire data analysis. If $m$ is the greatest integer smaller than 100$\alpha$,
+then the number of such subsets is larger than $\binom{N}{m}$. For $N = 1000$ and
+$m=10$, $\binom{N}{m} = 2.63 * 10^{23}$. So computing the Maximum Influence
+Perturbation in even this simple case requires re-running our data analysis over
+$10^{23}$ times. If each data analysis took 1 second, computing the Maximum
+Influence Perturbation would take over $8 * 10^{15}$ years to compute. Indeed, the Maximum
+Influence Perturbation, Most Influential Set, and Perturbation-Inducing
+Proportion may all be computationally prohibitive even for relatively small
+analyses.
+
+To address this computational issue, we propose to instead use a (fast)
+approximation to the Maximum Influence Perturbation, Most Influential Set, and
+Perturbation-Inducing Proportion. We will see, for the cost of one additional
+data analysis, our approximation can provide a lower bound on the exact Maximum
+Influence Perturbation. More generally we provide theory and experiments to
+support the quality of our approximation. We provide open-source
+code\footnote{\url{https://github.com/rgiordan/zaminfluence}} and show that our
+approximation is fully automatable in practice (\secref{AMIP}).
+
+We articulate our approximation in \secref{taylor_series,AMIP} below.  First, in
+\secref{taylor_series} to follow we derive a Taylor series approximation to the
+act of leaving out datapoints.  Though this approximation is based on a
+well-known first-order Taylor series approximation to the act of leaving out
+datapoints, known as the {\em empirical influence function}
+\citep{hampel1974influence,hampel1986robustbook}, we will assume no familiarity
+with this work, deferring discussion of related literature to
+\secref{influence_function,related_work}.  We then define our approximation to
+data dropping in \secref{AMIP}, using the observation that the finding the
+Maximum Influence Perturbation and its related quantities is trivial for the
+Taylor series approximation.  We then conclude this section with some simple,
+concrete examples of our approximation in
+\secref{function_examples,linear_regression}.
+
+% With our approximation in hand, in \secref{why} we analyze the accuracy of the
+% approximation, discuss the relationship between our approach and other
+% robustness measures, and provide theory and intuition for what makes an analysis
+% robust (or non-robust) to dropping a small, fixed proportion of the data.
+% Finally, we apply our methods to a number of real-world examples in
+% \secref{examples}.

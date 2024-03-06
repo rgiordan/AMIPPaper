@@ -1,0 +1,9 @@
+cache/**
+cache/*
+*.zip
+*.blg
+*.aux
+*.out
+*.log
+*.brf
+*.cfg

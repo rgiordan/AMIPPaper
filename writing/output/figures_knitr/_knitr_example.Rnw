@@ -1,0 +1,118 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Do not edit the TeX file your work
+% will be overwritten.  Edit the RnW
+% file instead.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<set_single_column, echo=FALSE>>=
+# We can't use the for_arxiv toggle because knitr processes before main is
+# run.  So set the appropriate variable here.
+single_column <- TRUE       # for the arxiv
+#single_column <- FALSE      # for a two-column conference paper.
+@
+
+<<setup, include=FALSE, cache=FALSE>>=
+knitr_debug <- FALSE # Set to true to see error output
+knitr_cache <- FALSE # Set to true to cache knitr output for this analysis.
+source("R_scripts/initialize.R", echo=FALSE)
+@
+
+<<load_data>>=
+source("R_scripts/ARM/load_data.R")
+@
+
+<<define_macros, results="asis">>=
+source("R_scripts/ARM/define_macros.R")
+@
+
+We ran experiments from \citet{gelman:2006:arm} for which data was available in
+the Stan examples repository \citep{stan-examples:2017}, resulting in
+comparisons between $\armNumCovsEstimated$ distinct covariance estimates from
+$\armNumModels$ different models using $\armNumDatasets$ distinct datasets. For
+each posterior we computed four chains of $\armNumMCMCSamples$ samples each
+using \texttt{rstanarm}.
+For each model we computed the Bayes posterior covariance, the IJ covariance,
+and the bootstrap estimate of the posterior mean variance, typically using
+$\armNumBootstraps$ bootstraps, though fewer bootstrap samples were generated
+for models that were particularly slow to fit.
+
+The median number of obseravations amongst the models was $\armMedianNumObs$,
+and the range was from $\armMinNumObs$ to $\armMaxNumObs$ exchangable
+observations. The models contained a both ordinary and logistic regression
+as well as models with only fixed effects and models that include random
+effects, as shown in \tabref{arm_models}.  We estimate frequentist covarainces
+of fixed effects and log variances; we do not estimate the frequentist variances
+of random effects or their correlations.
+
+Many models included random effects with very few distinct levels.  For such
+models, we took the exchangable unit to be a more fine-grained partition of the
+data, in some cases treating the observations as fully independent.  In such
+cases, the estimated frequentist variance is to be interpreted as the variance
+conditional on the random effects, and we would expect the Bayesian and
+frequentist variances to diverge from one another.
+
+\begin{table}[h]
+<<arm_model_table, cache=knitr_cache, results='asis'>>=
+source("R_scripts/ARM/model_table.R", echo=knitr_debug, print.eval=TRUE)
+@
+\caption{Models from \citet{gelman:2006:arm}\tablabel{arm_models}}
+\end{table}
+
+In this situation we lack ground truth, since we are using real data and cannot
+simulate from the true models. To compare the results, we compared the results
+to the bootstrap.  The IJ and bootstrap can be expected to disagree on small
+datasets, as they are computing different quantities, though we expect them to
+be comparable for larger models.  Bayesian posterior estimates may differ from
+the bootstrap for the same reason, though they may differ even asymptotically
+due to misspecification.
+
+We tested the difference between the covariance estimates and the bootstrap
+covariances divided by the estimated standard error of the difference,
+effectively conducting a frequentist test of whether the bootstrap and
+covariance estimates differ, where the error is induced by Monte Carlo error
+from the MCMC chain and from the bootstrap sampling.  The results are shown in
+\figref{relerr_graph} and \tabref{arm_reldiff_table}.
+The IJ produces results
+similar to the bootstrap for models with $N$ greater than the median and for
+regression parameters, there the two are certianly not equivalent, especially
+for smaller models.  As expected, the Bayesian posteriors are more different
+from the bootstrap than the IJ covariances, even for large $N$, indicating
+some misspecification.
+%
+<<graph_fig_cap1>>=
+figcap <- paste(
+    "The difference from the bootstrap covariance normalized by estimated ",
+    "standard errors.  ",
+    "Standard errors here include variation due to both MCMC and ",
+    "bootstrapping.",
+    sep="")
+@
+<<relerr_graph, cache=knitr_cache, fig.show='hold', fig.cap=figcap>>=
+source("R_scripts/ARM/z_score_graph.R", echo=knitr_debug, print.eval=TRUE)
+@
+%
+\begin{table}[h]
+%
+<<arm_reldiff_table, cache=knitr_cache, results='asis'>>=
+source("R_scripts/ARM/reldiff_table.R", echo=knitr_debug, print.eval=TRUE)
+@
+%
+\caption{Proportion of rejections with level $0.05$ within parameter types and
+dataset sizes when testing for equivalence to the bootstrap.  Ideal performance
+would be $0.95$. \tablabel{arm_reldiff_table}}
+%
+\end{table}
+%
+<<graph_fig_cap2>>=
+figcap <- paste(
+    "The difference from the bootstrap covariance normalized by the ",
+    "absolute bootstrap covariance estimate plus one standard error.  ",
+    "Standard errors here include variation due to both MCMC and ",
+    "bootstrapping.",
+    sep="")
+@
+<<normerr_graph, cache=knitr_cache, fig.show='hold', fig.cap=figcap>>=
+source("R_scripts/ARM/standardized_difference_graph.R", echo=knitr_debug, print.eval=TRUE)
+@

@@ -1,0 +1,16 @@
+--pws=aspell.en.pws
+--ignore=nospell
+--ignore=ffcode
+--ignore=settopmatter
+--ignore=ff,citet,citep
+--ignore=cref
+--ignore=label
+--ignore=align
+--ignore=togglefalse,iftoggle,newtoggle
+--ignore=proofpageref:op
+--ignore=secref,appref,thmref,defref,secref,algrref,assuref,Assuref
+--ignore=seclabel,applabel,thmlabel,deflabel,seclabel,algrlabel,assulabel
+--ignore=itemref,propref,corref,lemref
+--ignore=itemlabel,proplabel,corlabel,lemlabel,eqlabel,figlabel
+--ignore=eqlabel,Defref,eqref,figref
+--ignore=mathrm

@@ -1,0 +1,5 @@
+
+# Don't check in data files
+*
+!.gitignore
+!README

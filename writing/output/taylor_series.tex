@@ -1,0 +1,109 @@
+We begin by a deriving a Taylor series approximation to the act of dropping
+data.  Though this approximation is well-known as the empirical influence
+function (see \secref{influence_function} below for more details), we will
+derive the approximation assuming no prior knowledge other than ordinary
+multivariate calculus.
+
+To form a Taylor series, we will naturally require certain aspects of our
+estimator to be differentiable. We now summarise common assumptions under which
+the Taylor expansion exists, and note that many common analyses satisfy these
+assumptions---including, but not limited to, typical settings for OLS, IV, GMM,
+MLE, and variational Bayes. Below, in \secref{accuracy}, we will state stricter
+sufficient conditions that guarantee not only the existence but also the
+finite-sample accuracy of our approximation.
+%
+\begin{assu}
+%
+$\thetahat$ is a \emph{Z-estimator}; that is, $\thetahat$ is the solution to the
+following estimating equation,\footnote{Sometimes
+\eqref{estimating_equation_no_weights} is associated with ``M-estimators'' that
+optimise a smooth objective function, since such M-estimators typically take the
+form of a Z-estimator which set the gradient of the objective function to zero.
+However, some Z-estimators, such as exactly identified IV regression or GMM, do
+not optimise any particular empirical objective function, so the notion of
+Z-estimator is in fact more general than that of an M-estimator.} where
+$G(\cdot, \d_{n}): \mathbb{R}^{\P} \rightarrow \mathbb{R}^{\P}$ is a twice
+continuously differentiable function and $\zP$ is the column vector of $P$
+zeros.
+%
+\begin{align}\eqlabel{estimating_equation_no_weights}
+%
+\sumn G(\thetahat, \d_{n}) =  \zP .
+%
+\end{align}
+\end{assu}
+%
+\begin{assu}
+%
+	$\thetafun: \mathbb{R}^{\P} \rightarrow \mathbb{R}$, which we interpret as a
+	function that takes the full parameter $\theta$ and returns the quantity of
+	interest from $\theta$, is continuously differentiable.\footnote{Below, we
+	will allow for additional dependence in $\thetafun$ on data weights.}
+%
+\end{assu}
+%
+For instance, the function that picks out the $\p$-th effect from the vector
+$\theta$, $\thetafun(\theta) = \theta_{\p}$, satisfies this assumption.
+
+To form a Taylor series approximation to the act of leaving out datapoints, we
+introduce a vector of data weights, $\w = (w_1, \ldots, w_N)$, where $w_n$ is
+the weight for the $n$-th data point. We recover the original data set by giving
+every data point a weight of 1: $\w = \onevec = (1, \ldots, 1)$. We can denote a
+subset of the original data as follows: start with $\w = \onevec$; then, if the
+data point indexed by $n$ is left out, set $w_n = 0$. We can collect weightings
+corresponding to all data subsets that drop no more than 100$\alpha$\% of the
+original data as follows:
+%
+\begin{align}\eqlabel{w_alpha_def}
+	W_\alpha &:=
+	\left\{ \w : \textrm{No more than }
+ 		   \lfloor \alpha N \rfloor \textrm{ elements of } \w \textrm{ are } 0
+			\textrm{ and the rest are } 1 \right\}.
+\end{align}
+%
+Our approximation will be to form a Taylor expansion of our quantity of interest
+$\thetafun$ as a function of the weights, rather than recalculate $\thetafun$
+for each data subset (i.e., for each reweighting).
+
+To that end, we first reformulate our setup, now with the weights $\w$; note
+that we recover the original problem (for the full data) above by setting
+$\w=\onevec$ in what follows. Let $\thetahat(\w)$ be our parameter estimate at
+the weighted data set described by $\w$. Namely, $\thetahat(\w)$ is the solution
+to the weighted estimating equation
+%
+\begin{align} \eqlabel{estimating_equation_with_weights}
+	\sumn w_n G(\thetahat(\w), \d_{n}) = \zP.
+\end{align}
+%
+We allow that the quantity of interest $\thetafun$ may depend on $\w$ not only
+via the estimator $\theta$, so we optionally write $\thetafun(\theta, \w)$
+with $\thetafun(\cdot,\cdot): \mathbb{R}^{\P} \times \mathbb{R}^N \rightarrow
+\mathbb{R}$.  Whenever we write $\thetafun(\cdot)$ as a function of a single
+argument, we will implicitly mean $\thetafun(\cdot, \onevec)$.
+%
+We require that $\thetafun(\cdot,\cdot)$ be continuously differentiable in both
+its arguments. For instance, we can use $\thetafun(\theta,\w) = \theta_{\p}$ to
+pick out the $\p$-th component of $\theta$. Or, to consider questions of
+statistical significance, we may choose $\thetafun(\theta,\w) = \theta_{\p} +
+1.96 \sigma_{\p}(\theta,\w)$, where $\sigma_{\p}(\theta,\w)$ is an estimate of
+the standard error depending smoothly on $\theta$ and $\w$; this example is our
+motivation for allowing the more general $\w$ dependence in $\thetafun(\theta,
+\w)$.
+
+With this notation in hand, we can restate our original goal of computing
+the Most Influential Set as solving
+%
+\begin{align} \eqlabel{mis_weight}
+	\w^{**} &:=
+	\argmax_{\w \in W_\alpha}
+   		 \left( \thetafun(\thetahat(\w), \w) - \thetafunhat \right).
+\end{align}
+%
+Here we focus on positive changes in $\thetafun$ since negative changes can be
+found by reversing the sign of $\thetafun$ and using $-\thetafun$ instead. In
+particular, the zero indices of $\w^{**}$ correspond to the Most Influential
+Set: $\mis{\alpha} := \left\{n: \w^{**}_n = 0 \right\}$. And $\mip{\alpha} =
+\thetafun(\w^{**}) - \thetafunhat$ is the Maximum Influence Perturbation. The
+Perturbation Inducing Proportion is the smallest $\alpha$ that induces a change
+of at least size $\Delta$: $\loprop{\Delta} := \inf\{ \alpha: \mip{\alpha} >
+\Delta\}$.

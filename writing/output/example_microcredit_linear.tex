@@ -1,0 +1,117 @@
+We now show that even a simple 2-parameter linear model that performs a
+comparison of means between the treatment and control group of a randomised
+trial can be highly sensitive. To that end, we consider the analysis of seven
+randomised controlled trials of expanding access to microcredit, first
+aggregated in \citet{meager2019understanding}.  In
+\secref{example_microcredit_hierarchical} below, we will consider a more
+complicated Bayesian hierarchical model on the same data.
+
+%%
+\subsubsection{Background}
+%%
+Each of the seven microcredit studies was conducted in a different country, and
+each study selected certain communities to randomly receive greater access to
+microcredit. Researchers either built a branch, or combined building a branch
+with some active outreach, or randomly selected borrowers among those who
+applied. The selected studies are:
+%
+\citet{angelucci2015microcredit}, \citet{attanasio2015impacts},
+\citet{augsburg2015impacts}, \citet{banerjee2015miracle},
+\citet{crepon2015estimating}, \citet{karlan2011microcredit}, and
+\citet{tarozzi2015impacts}.
+%
+Six of these studies were published in a special issue of the \emph{American
+Economics Journal: Applied Economics} on microcredit. All seven studies together
+are commonly considered to represent the most solid evidence base for
+understanding the impact of microcredit.
+
+We follow the original studies and \citet{meager2019understanding} in analyzing
+the impact of access to microcredit as the treatment of interest. The studies
+range in their sample sizes from around 1,000 households in Mongolia
+\citep{attanasio2015impacts} to around 16,500 households in Mexico
+\citep{angelucci2015microcredit}. We first focus on the headline results on
+household business profit regressed on an intercept and a binary variable
+indicating whether a household was allocated to the treatment group or to the
+control group. For household $i$ in site $k$, let $Y_{ik}$ denote the profit
+measured, and let $T_{ik}$ denote the treatment status. We estimate the
+following model via OLS:
+%
+\begin{equation}\eqlabel{mc_regression}
+	Y_{ik} = \beta_0 + \beta T_{ik} + \epsilon_{ik}.
+\end{equation}
+
+This regression model compares the means in the treatment and control groups and
+estimates the difference as $\hat{\beta}$. We follow
+\citet{meager2019understanding} in omitting the control variables or fixed
+effects from the regressions in order to examine the robustness of this
+fundamental procedure. But in principle this omission should make no difference
+to the estimate $\hat{\beta}$, and indeed it does not
+\citep{meager2019understanding}.\footnote{The omission may in principle make a
+difference to the inference on $\beta$ by affecting the standard errors.
+However, it turns out that in these studies the additional covariates make very
+little difference to the standard errors. We also do not cluster the standard
+errors at the community level for the same reason; the results are not
+substantially changed. Running the regression above in each of the seven studies
+delivers almost identical results to the preferred specification, as it should
+if intra-cluster correlations are weak and covariates are not strongly predictive
+of household profit.}
+
+%%
+\subsubsection{AMIP sensitivity results}
+%
+\MicrocreditProfitResultsTable{}
+\MicrocreditTemptationResultsTable{}
+%
+%%
+The sensitivity results for the linear regression of profit on microcredit
+access appear in \tableref{mc_profit_results}. In all cases, by removing less
+than 1\% of the data points can change either the sign or the significance. In
+three of the studies, one can drop less than 1\% of the data points to generate
+a result of the opposite sign that would be deemed significant at the 5\% level.
+Mexico, the largest study, is the most sensitive: a single data point among the
+16,561 households in Mexico determines the sign (as also discussed above in
+\secref{linear_regression}). To produce a statistically significant result of
+the opposite sign---that is, to turn Mexico's noisy negative result into a
+``strong'' positive result---one need remove only 15 data points, less than
+0.1\% of the sample. Mongolia, the smallest study in terms of sample size, is
+among the most robust in terms of sign changes; it takes 2\% of the sample to
+change the sign. Producing a significant result of the opposite sign also
+requires more than 1\% removal in the Philippines, Bosnia, Ethiopia, and
+Mongolia---whereas Mexico, India, and Morocco are more sensitive. We check the
+performance of our approximation by manually re-running the analysis with the
+data removed; the ``Refit Estimate'' column shows that the claimed reversal is
+always achieved in practice for these analyses.
+
+By comparing the results of the present section with those of
+\secref{example_medicaid,example_transfers}, we can confirm the conclusion of
+\secpointref{amip_robustness_breakdown}{amip_is_not_se} that standard errors
+are, in general, distinct from AMIP sensitivity.  Despite the fact that original
+estimates of \tableref{mc_profit_results} are statistically insignificant, some
+of these non-significant results are more AMIP-robust than some of the
+significant results in the Cash Transfers and Oregon Medicaid examples; consider
+the ``Significant sign change'' result in the Philippines study, for example.
+
+We next demonstrate that the AMIP sensitivity observed in
+\tableref{mc_profit_results} cannot simply be ascribed to statistical
+insignificance. To do so, we consider a different outcome with smaller variability
+and show that it reveals a similar sensitivity to the profit outcome.
+The variable we now consider is household consumption spending on temptation goods such
+as alcohol, chocolate, and cigarettes, since the effect of microcredit on
+temptation spending was estimated by \citet{meager2019understanding} with the
+greatest precision of all six considered outcome variables.
+\Tableref{mc_temptation_results} shows the results of applying the AMIP to  the
+same regression given in \eqref{mc_regression}, but with temptation spending as the outcome. While
+somewhat more robust than the profit analyses, the difference in the approximate
+removal proportions in \tableref{mc_temptation_results} is not large.
+
+Finally, one might be tempted to ascribe the AMIP-non-robust results in
+\tableref{mc_profit_results} to outliers resulting from the heavy tails of the
+household profit variable (a phenomenon well-documented by
+\citet{meager2020aggregating}). However, as we discuss in
+\secpointref{influence_function_for_real}{gross_errors} above, gross error
+robustness is qualitatively distinct from AMIP robustness (see also the
+discussion of outlier trimming at the end of \secref{example_transfers}).
+Indeed, the more complex hierarchical model of the next section,
+\secref{example_microcredit_hierarchical}, was designed precisely to accommodate
+the heavy tail of the household profit variable, and yet---as we will
+show---still exhibits a high degree of AMIP-sensitivity.

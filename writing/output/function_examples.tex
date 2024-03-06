@@ -1,0 +1,74 @@
+We end this section with some concrete examples of quantities of interest.
+Recall from the start of \secref{MIP} that we are often interested in whether we
+can change the sign or significance of an estimator, or generate a significant
+result of the opposite sign. Recall that $\thetafun(\cdot)$ with only one
+argument is a function of $\theta$, and $\thetafun(\cdot, \cdot)$ with two
+arguments is a function of both $\theta$ and the weights $\w$.
+
+To form our motivating examples, suppose for the remainder of this section we
+are interested in the $\p$-th component of $\hat\theta$, where $\thetahat_{\p}$
+is positive and statistically significant.  That is, let $\hat\sigma_{\p}$ be an
+estimator of the variance of the limiting distribution of
+$\sqrt{N}\thetafunhat$, and let $\thetahat_p - \frac{1.96}{\sqrt{N}}
+\hat\sigma_{\p}$ be the lower end of our confidence interval. So we assume
+$\thetahat_p > 0$ and $\thetahat_p - \frac{1.96}{\sqrt{N}} \hat\sigma_{\p} > 0$.
+Moreover, we will write $\hat\sigma_{\p}(\theta, \w)$ to emphasise that standard
+errors are typically given as functions of $\theta$ and the weights $\w$.  For
+example, standard errors based on the observed Fisher information matrix $\meann
+\w_n \fracat{\partial G(\theta, \d_n)}{\partial \theta}{\thetahat(\w)}$ will, in
+general, depend on the weights both explicitly and through $\thetahat(\w)$.
+
+To make $\thetahat_{\p}$ change sign, we can take
+%
+\begin{align} \eqlabel{function_change_sign}
+%
+\thetafun(\theta) =&
+- \theta_{\p}.
+& \textrm{(Change sign)}
+%
+\end{align}
+%
+We use $-\theta_{\p}$ instead of $\theta_{\p}$ since we have defined $\thetafun$
+as a function that we are trying to increase (cf.\ \eqref{mis_weight} and the
+discussion after). Increasing $\thetafun(\thetahat)$, for $\thetafun$ in
+\eqref{function_change_sign}, by an amount $\Delta = \thetahat_{\p}$ is
+equivalent to $\thetahat_{\p}$ changing sign from positive to negative.
+
+To make $\thetahat_{\p}$ statistically non-significant, we wish
+to take the lower bound of the confidence interval to $0$. To that end, we can take
+%
+\begin{align} \eqlabel{function_change_significance}
+%
+\thetafun(\theta, \w) =&
+- \left(\theta_{\p} - \frac{1.96}{\sqrt{N}} \hat\sigma_{\p}(\theta, \w) \right).
+& \textrm{(Change significance)}
+%
+\end{align}
+%
+As in the previous case, we choose \eqref{function_change_significance} with a
+leading negative sign because we are trying to increase $\thetafun$ (cf.\
+\eqref{mis_weight}). Increasing $\thetafun(\thetahat, \w)$, for $\thetafun$ in
+\eqref{function_change_significance}, by an amount $\Delta = \thetahat_{\p} -
+\frac{1.96}{\sqrt{N}} \hat\sigma_{\p}$ is equivalent to $\thetahat_{\p}$
+becoming statistically insignificant.
+
+Similarly,
+to change to a significant result of the opposite sign, we can take
+%
+\begin{align*}
+%
+\thetafun(\theta, \w) =&
+- \left(\theta_{\p} + \frac{1.96}{\sqrt{N}} \hat\sigma_{\p}(\theta, \w) \right)
+& \textrm{(Significant sign reversal)}
+%
+\end{align*}
+%
+and $\Delta = \thetahat_{\p} + \frac{1.96}{\sqrt{N}} \hat\sigma_{\p}$, for if
+the upper end of the confidence interval is negative, then the estimator must be
+negative and statistically significant.
+
+In each case above, the quantity $\Delta$ represents how far we must move
+$\thetafun$ in order to reverse our conclusions.  In this sense, $\Delta$ is a
+measure of the amount of ``signal'' in the original dataset.  As we will discuss
+in \secref{why} below, the signal $\Delta$ is one of the three
+key quantities that determine AMIP robustness.

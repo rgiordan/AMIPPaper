@@ -1,0 +1,138 @@
+In our first experiment, we show that even empirical analyses that display
+little classical uncertainty can be sensitive to the removal of less than 1\% of
+the sample. We consider the Oregon Medicaid study \citep{finkelstein2012oregon}
+and focus on health outcomes. The standard errors of the treatment effects are
+small relative to effect size; against a null hypothesis of no effect, most $p$
+values are well below 0.01. Yet we find that for most of the results, removing
+less than 1\% of the sample can produce a significant result of the opposite
+sign to the full-sample analysis. In one case, removing less than 0.05\% of the
+sample can change the significance of the result.
+
+%%
+\subsubsection{Background and replication}
+%%
+First we provide some context for the analysis and results of
+\citet{finkelstein2012oregon}. In early 2008, the state of Oregon opened a
+waiting list for new enrollments in its Medicaid program for low-income adults.
+Oregon officials then drew names by lottery from the 90,000 people who signed
+up, and those who won the lottery could sign up for Medicaid along with any of
+their household members. This setup created a randomization into treatment and
+control groups at the household level. The \citet{finkelstein2012oregon} study
+measures outcomes one year after the treatment group received Medicaid. About
+25\% of the treatment group did indeed have Medicaid coverage by the end of the
+trial. The main analysis investigates treatment assignment as treatment itself
+(``intent to treat'' or ITT analysis) and uses treatment assignment as an
+instrumental variable for take-up of insurance coverage (``local average
+treatment effect'' or LATE analysis).
+
+We focus on the health outcomes of winning the Medicaid lottery, which appear in
+Panel B from Table 9 of \citet{finkelstein2012oregon}. Each of these $J$
+outcomes is denoted by $y_{ihj}$ for individual $i$ in household $h$ for outcome
+type $j$. The data sample to which we have access consists of survey responders
+($N = 23{,}741$); some responders are from the same household.  The variable
+$\texttt{LOTTERY}_h$ equals one if household $h$ won the Medicaid lottery, and
+zero otherwise. All regressions use a set of covariates $X_{ih}$ comprised of
+household size fixed effects, survey wave fixed effects, and the interaction
+between the two. All regressions also use a set of demographic and economic
+covariates $V_{ih}$. To infer the ITT effects of winning the Medicaid lottery,
+the authors estimate the following model via OLS: \begin{align*}
+%
+y_{ihj} = \beta_0 + \beta_1 \texttt{LOTTERY}_h + \beta_2 X_{ih} +
+    \beta_3 V_{ih} + \epsilon_{ihj}.
+%
+\end{align*}
+
+To infer the LATE of taking up Medicaid on compliers, the authors employ an
+Instrumental Variables (IV) strategy using the lottery as an instrument for
+having Medicaid insurance. All standard errors are clustered on the household,
+and all regressions are weighted using survey weights defined by the variable
+\texttt{weight\_12m}. We have access to the following seven outcome variables,
+presented in Panel B of Table 9 of the original paper (as well as our tables
+below) in the following order: a binary indicator of a self-reported measure of
+health being good or very good or excellent (not fair or poor), a binary
+indicator of self-reported health not being poor, a binary indicator of health
+being about the same or improving over the last six months, the number of days
+of good physical health in the past 30 days, the number of days on which poor
+physical or mental health did not impair usual activities, the number of days
+mental health was good in the past 30 days, and an indicator of not being
+depressed in last two weeks. We replicate Panel B of Table 9 of
+\citet{finkelstein2012oregon} exactly, both for the ITT effect ($\hat{\beta}_1$)
+for the entire population and for the LATE on compliers ($\hat{\pi}_1$). Both
+analyses show strong evidence for positive effects on all health measures, with
+most $p$ values well below 0.01.
+
+%%
+\subsubsection{AMIP Sensitivity Results}
+
+\OHIEResultsTable{}
+
+%%
+For each health outcome in Panel B from Table 9 of
+\citet{finkelstein2012oregon}, we compute the AMIP to assess how many data
+points one needs to remove to change the sign of the treatment effect, the
+significance of the treatment effect, or produce a significant result of the
+opposite sign. The sensitivity of the LATE analysis is shown in
+\tableref{ohie_profit_results_iv} and the sensitivity of the ITT analysis is
+shown in \tableref{ohie_profit_results_reg}. In both cases we use exactly the
+models from the original paper, with all fixed effects and controls included and
+with clustering at the household level. For most outcomes, for both the LATE and
+ITT analysis, the sign of the treatment effect can be changed by removing around
+0.5\% of the data, or approximately 100 data points in a sample of approximately
+22,000. The most robust outcome, ``Health being better than fair'' (``Health
+genflip 12m''), requires the removal of a little over 1\% of the sample to
+change the sign. Across the various outcomes, we can drop even less of the
+sample to change the results from significant to non-significant. In some cases,
+we need remove only 10 or 20 data points to effect a change in significance.
+Finally, for most outcomes, we can remove less than 1\% of the data to produce a
+significant result of the opposite sign. The only two exceptions, ``Health
+genflip 12m'' and ``Health change flip 12m'', require the removal of slightly
+more than 1\% to generate a significant result with the opposite sign.
+
+We check the performance of the approximation for each analysis by re-running
+the model after manually removing the data points in the Approximate Most
+Influential Set. The result of this procedure is shown in the ``Refit Estimate''
+column of \tableref{ohie_profit_results_iv, ohie_profit_results_reg}. For almost
+every result in each table, our approximate metric reliably uncovers
+combinations of data points that do deliver the claimed changes. As we discuss
+in \secref{exact_lower_bound}, the changes recorded in the ``Refit Estimate''
+column of \tableref{ohie_profit_results_iv, ohie_profit_results_reg} form a
+lower bound on the true worst-case finite-sample sensitivity.
+
+By comparing \tableref{ohie_profit_results_iv} with
+\tableref{ohie_profit_results_reg}, we see that the ITT results, estimated via
+OLS, are not notably more AMIP-robust than the LATE results, which are estimated
+via IV. This may seem at first counterintuitive based on a heuristic belief that
+IV is in some sense a less ``robust'' analysis than OLS in finite sample: for
+example, recent authors, including \citet{young2019consistency}, have suggested
+that the uncertainty intervals for IV may be more poorly calibrated in finite
+samples than the intervals for OLS.  However, as we discuss in \secref{why}, the
+quality of being ``robust'' in the sense of a finite-sample estimator providing
+a good approximation to an asymptotic quantity is simply unrelated to AMIP
+robustness.  Neither the size of the AMIP itself nor the accuracy of the AMIP
+approximation depends on asymptotic arguments (see, e.g.,
+\secpointref{amip_robustness_breakdown}{snr_drives_amip} and the discussion of
+\thmref{thetafun_accuracy}).  The AMIP measures the sensitivity to data ablation
+of a particular procedure on a particular dataset and is indifferent to the
+fidelity of the chosen quantity of interest to some asymptotic limit.  For this
+reason, a procedure such as IV may be ``non-robust'' in the sense of having poor
+coverage in finite sample (as reported by \citet{young2019consistency}) and yet
+be AMIP-robust, or vice versa. The two notions of ``robustness'' are simply
+different.
+
+% Recent authors including
+% \citet{young2019consistency} have suggested that the uncertainty intervals for
+% IV may be more poorly calibrated than the intervals for OLS. The fact that we
+% find IV to be similarly robust, according to the AMIP, to OLS does not
+% contradict this conclusion; these are two different problems.
+% \citet{young2019consistency} examines whether test size and power are close to
+% nominal when data are sampled from a static population, and finds that
+% finite-sample inference for IV based on limiting normal approximations may not
+% perform in line with asymptotic theory. While these asymptotic arguments might
+% motivate a practitioner to use a particular quantity of interest, we assess
+% whether this quantity of interest applied to the data at hand can be
+% meaningfully altered by removing a few data points. Recall from
+% \secref{influence_function_ols} that even correctly specified models with
+% well-calibrated confidence intervals can be AMIP-non-robust when there is a low
+% signal-to-noise ratio in the analysis problem.  Conversely, even if a result is
+% AMIP-robust, its confidence intervals may by poorly calibrated, e.g., for the
+% reasons analyzed by \citet{young2019consistency}.

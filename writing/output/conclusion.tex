@@ -1,0 +1,53 @@
+
+For our research conclusions to safely inform economic policy decisions, we need
+additional tools to quantify uncertainty beyond standard errors. There are many
+ways of quantifying the dependence between the finite-sample realization of the
+data and the conclusions of statistical inference. This dependence has become
+synonymous with standard errors in frequentist statistics, but the notions are
+equivalent only under a certain paradigm that considers a hypothetical perfect
+random resampling exercise for the purpose of evaluating a specific parameter
+within a given model. This hypothetical may not capture all the data sensitivity
+relevant to applied social science.
+
+Many key ideas of 20th century statistics have their origins in the context of
+randomised agricultural trials, where the difference in yield across multiple
+fields is well-modeled by independent sampling variation. Contrast this setting
+with trials of economic interventions to alleviate poverty, where randomly
+sampling individuals or communities is a challenge and interventions may be
+applied across very different contexts. In such cases, statistical models are
+often intended to provide tractable and interpretable summaries or proxies of
+the general impact of interventions.  As such methods often average information
+across individuals in ways that may not always reflect broader policy interests,
+it seems essential to interrogate the sensitivity of our conclusions to
+departures from the hypothetical thought experiment.\footnote{In agricultural
+trials, total yields are the true quantity of interest; for microcredit trials,
+the average treatment effect is but a convenient summary. If the average profit
+were to increase slightly through one individual becoming wealthy while leaving
+all others destitute, one could consider the intervention a failure. By
+contrast, if a single plant produced an entire harvest's worth of corn, the
+outcome would still be desirable, if strange.}
+
+In this paper, we have offered one alternative way of conceiving of and
+quantifying the dependence of empirical results on the sample data, beyond
+standard errors. Sensitivity of conclusions to data removal under our metric
+does not necessarily imply a problem with the sample. But the goal of inference
+is not to learn about the sample, but to learn about the population. If
+minor alterations to the sample can generate major changes in the inference, and
+we know that the environment in which we do economics is changing all the time,
+we ought to be less confident that we have learned something fundamental about
+the world we seek to understand, for which we ultimately seek to
+make policy. This does not imply that the original analysis is invalid
+according to classical sampling theory, and we do not recommend that researchers
+abandon the original full-sample results even if they are sensitive according
+to our metric. However, reporting our metrics alongside standard errors would
+improve our ability to understand and interpret the findings of a given
+analysis.
+
+Since AMIP analysis always indicates which data points have high (approximate)
+influence, our methods allow researchers not only the chance to check that the
+approximation worked on their own sample, but to understand what---if
+anything---makes these data points special. Investigating influential points may
+provide insight into the way in which a given inferential procedure is using the
+finite-sample information to generate claims about the population parameters. In
+addition, in cases when this sensitivity is undesirable, it may be fruitful to
+develop new statistical methods to ameliorate it.

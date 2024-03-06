@@ -1,0 +1,172 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Do not edit the TeX file your work
+% will be overwritten.  Edit the RnW
+% file instead.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<setup, include=FALSE, cache=FALSE>>=
+knitr_debug <- FALSE # Set to true to see error output
+
+rerun_all <- TRUE
+
+# Set to true to cache knitr output for this analysis.
+sim_cache <- TRUE && (!rerun_all)
+cash_cache <- TRUE && (!rerun_all)
+ohie_cache <- TRUE && (!rerun_all)
+microcredit_cache <- TRUE && (!rerun_all)
+mcmix_cache <- FALSE && (!rerun_all)
+
+source("figures_knitr/initialize.R", echo=FALSE)
+@
+
+<<load_data>>=
+source("figures_knitr/load_data.R")
+@
+
+\newcommand{\DefineMacros}{
+<<define_macros, results="asis">>=
+source("figures_knitr/define_macros.R")
+@
+}
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+% Tables
+
+\newcommand{\CashTransfersResultsTable}{
+% \input{figures/cash_transfers_re_run_table.tex}
+<<cash_transfers_re_run_table, cache=cash_cache, results='asis'>>=
+source("figures_knitr/cash_transfers/cash_transfers_results_table.R",
+       echo=knitr_debug, print.eval=TRUE)
+@
+}
+
+%%%%%%%%%%%%%%%%%%%
+% OHIE
+
+\newcommand{\OHIEResultsTable}{
+% \input{figures/OHIE_table_9_IV_re_run_table.tex}
+<<OHIE_results_table, cache=ohie_cache, results='asis'>>=
+source("figures_knitr/OHIE/OHIE-table_results.R",
+       echo=knitr_debug, print.eval=TRUE)
+@
+}
+
+
+%%%%%%%%%%%%%%%%%%%
+% Microcredit
+
+\newcommand{\MicrocreditProfitResultsTable}{
+% \input{figures/microcredit_profit_re_run_table.tex}
+<<microcredit_profit_results_table, cache=microcredit_cache, results='asis'>>=
+source("figures_knitr/microcredit/microcredit_profit_results_table.R",
+       echo=knitr_debug, print.eval=TRUE)
+@
+}
+
+
+\newcommand{\MicrocreditTemptationResultsTable}{
+% \input{figures/microcredit_profit_re_run_table.tex}
+<<microcredit_temptation_results_table, cache=microcredit_cache, results='asis'>>=
+source("figures_knitr/microcredit/microcredit_temptation_results_table.R",
+       echo=knitr_debug, print.eval=TRUE)
+@
+}
+
+%%%%%%%%%%%%%%%%%%%
+% Microcredit mixture
+
+\newcommand{\MicrocreditMixtureResultsTable}{
+<<mcmix_re_run_table, cache=mcmix_cache, results='asis'>>=
+source("figures_knitr/microcredit_mixture/microcredit_mix_refit_table.R",
+       echo=knitr_debug, print.eval=TRUE)
+@
+}
+
+\newcommand{\MicrocreditMixtureSdResultsTable}{
+<<mcmix_sd_re_run_table, cache=mcmix_cache, results='asis'>>=
+source("figures_knitr/microcredit_mixture/microcredit_mix_sd_refit_table.R",
+       echo=knitr_debug, print.eval=TRUE)
+@
+}
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+% Graphs
+
+%%%%%%%%%%%%%%%%%%%
+% Simulations
+
+%
+% \newcommand{\SimGridNormalGraph}{
+% <<sim_graphics_cap2>>=
+% figcap <- paste0(
+%     "Simulation results for linear regression at differing scales of $\\sigma_x$ ",
+%     "and $\\sigma_\\epsilon$. A darker red colour indicates a highly sensitive ",
+%     "analysis, in which only a small proportion of the sample needs to be ",
+%     "removed to effect a change of sign. A lighter red colour indicates ",
+%     "greater robustness. The grey areas indicate ",
+%     "$\\amip{\\alpha} = \\na$, a failure of the linear approximation to ",
+%     "locate any way to effect these changes.")
+% SetImageSize(aspect_ratio=base_aspect_ratio / 2.2)
+% @
+% <<sim-grid-normal, cache=sim_cache, fig.show='hold', fig.cap=figcap>>=
+% source("figures_knitr/simulations/grid_results.R",
+%        echo=knitr_debug, print.eval=TRUE)
+% SetFullImageSize()
+% @
+% }
+
+
+%
+%
+% \newcommand{\SimAccuracyNormalGraph}{
+% <<sim_graphics_cap3>>=
+% figcap <- paste0(
+%     "Simulation results for linear regression at differing scales of $\\sigma_x$ ",
+%     "and $\\sigma_\\epsilon$. A darker red colour indicates a highly sensitive ",
+%     "analysis, in which only a small proportion of the sample needs to be ",
+%     "removed to effect a change of sign. A lighter red colour indicates ",
+%     "greater robustness. The grey areas indicate ",
+%     "$\\amip{\\alpha} = \\na$, a failure of the linear approximation to ",
+%     "locate any way to effect these changes.")
+% SetImageSize(aspect_ratio=base_aspect_ratio / 2.2)
+% @
+% <<sim-acc-normal, cache=sim_cache, fig.show='hold', fig.cap=figcap>>=
+% source("figures_knitr/simulations/accuracy_results.R",
+%        echo=knitr_debug, print.eval=TRUE)
+% SetFullImageSize()
+% @
+% }
+
+
+\newcommand{\SimCombNormalGraph}{
+<<sim_graphics_cap4>>=
+figcap <- paste0(
+    "Simulation results for univariate linear regression with ",
+    "$N = \\SimAccNumObs$ observations.  ",
+    "\\textbf{Left panel:}  ",
+    "The approximate perturbation inducing proportion ",
+    "at differing values of $\\sigma_x$ ",
+    "and $\\sigma_\\varepsilon$. Red colors indicate datasets whose sign can ",
+    "be predicted to change when dropping less than 1\\% of datapoints. ",
+    "The grey areas indicate ",
+    "$\\amip{\\alpha} = \\na$, a failure of the linear approximation to ",
+    "locate any way to change the sign.  ",
+    "\\textbf{Right panel:}  ",
+    "The actual change, linear approximation to the change, ",
+    "and approximation error ",
+    "for $\\sigma_x = \\SimAccSigx$ and ",
+    "$\\sigma_\\varepsilon = \\SimAccSigeps$.")
+SetImageSize(aspect_ratio=base_aspect_ratio / 2.2)
+@
+<<sim-comb-normal, cache=sim_cache, fig.show='hold', fig.cap=figcap>>=
+source("figures_knitr/simulations/graphs_comb.R",
+       echo=knitr_debug, print.eval=TRUE)
+SetFullImageSize()
+@
+}
