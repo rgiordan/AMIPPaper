@@ -1,8 +1,33 @@
 # AdversarialInfluenceWorkbench
 
-This private repo contains our work on adversarial robustness.
+This repository contains code to reproduce our paper,
+[An Automatic Finite-Sample Robustness Metric: When Can Dropping a Little Data Make a Big Difference?](https://arxiv.org/abs/2011.14999) by Tamara Broderick, Ryan Giordano, and Rachael Meager.
 
-The writing directory is `writing/output/`.
+The writing directory is `writing/output/`.  There is data processing
+code in both `examples` and in `writing/applications`.
 
-For instructions on re-running the anlyses from the paper, see
-`writing/README_analyses`.
+
+The best guide to reproducing the paper and its analyses is found in
+`writing/output/makefile`.  To run it, first
+
+1) Set the `GIT_REPO_LOC` variable at the top of `makefile` to point to the full path of the
+   location of the cloned `AMIPPaper` repository
+2) Run `make all` in the `output` directory.
+3) Follow the instructions to download the needed data.
+4) Continue to run `make all` and follow the instructions until the paper succesfully compiles.
+
+
+To clear paper output, run `make clean`.
+
+To pre-process data for individual analyses, you can run any of the subsidiary targets:
+
+- `make sim_data`
+- `make cash_data`
+- `make mc_data`
+- `make mc_data`
+
+Note that the most complicated analysis, the mixture model, requires more
+effort to run than the `R` analysis.
+
+If you have problems reproducing any aspect of the pipeline, please
+send Ryan an email.
