@@ -61,7 +61,7 @@ clean_sim_data:
 
 
 # Cash transfers
-CASH_DTA := $(EXAMPLES_DIR)/examples/cash_transfers/angelucci-digiorgi-data-code/table1.dta
+CASH_DTA := $(EXAMPLES_DIR)/cash_transfers/angelucci-digiorgi-data-code/table1.dta
 $(CASH_DTA):
 	echo The cash transfers analysis requires $(CASH_DTA)
 	echo The cash transfers raw data can be found here:
@@ -69,7 +69,7 @@ $(CASH_DTA):
 	exit 1
 
 CASH_RDS := $(EXAMPLES_DIR)/cash_transfers/processed_CT_data.rds
-$(CASH_RDS):
+$(CASH_RDS): $(CASH_DTA)
 	Rscript $(APP_DIR)/cash_transfers/read-cash-data-into-R.R --git_repo_loc=$(GIT_REPO_LOC)
 
 $(CASH_DATA): $(CASH_RDS)
@@ -100,8 +100,32 @@ $(OHID_DATA_DIR)/oregonhie_stateprograms_vars.dta:
 	echo All Oregon medicaid data is from here:
 	echo https://www.nber.org/research/data/oregon-health-insurance-experiment-data
 	exit 1
+$(OHID_DATA_DIR)/oregonhie_survey0m_vars.dta:
+	echo The Oregon medicaid analysis requires \
+		$(OHID_DATA_DIR)/oregonhie_survey0m_vars.dta
+	echo All Oregon medicaid data is from here:
+	echo https://www.nber.org/research/data/oregon-health-insurance-experiment-data
+	exit 1
+$(OHID_DATA_DIR)/oregonhie_survey6m_vars.dta:
+	echo The Oregon medicaid analysis requires \
+		$(OHID_DATA_DIR)/oregonhie_survey6m_vars.dta
+	echo All Oregon medicaid data is from here:
+	echo https://www.nber.org/research/data/oregon-health-insurance-experiment-data
+	exit 1
+$(OHID_DATA_DIR)/oregonhie_survey12m_vars.dta:
+	echo The Oregon medicaid analysis requires \
+		$(OHID_DATA_DIR)/oregonhie_survey12m_vars.dta
+	echo All Oregon medicaid data is from here:
+	echo https://www.nber.org/research/data/oregon-health-insurance-experiment-data
+	exit 1
 
-$(OHIE_CSV): $(OHID_DATA_DIR)/oregonhie_descriptive_vars.dta $(OHID_DATA_DIR)/oregonhie_stateprograms_vars.dta
+
+$(OHIE_CSV): \
+		$(OHID_DATA_DIR)/oregonhie_descriptive_vars.dta \
+		$(OHID_DATA_DIR)/oregonhie_stateprograms_vars.dta \
+		$(OHID_DATA_DIR)/oregonhie_survey0m_vars.dta \
+		$(OHID_DATA_DIR)/oregonhie_survey6m_vars.dta \
+		$(OHID_DATA_DIR)/oregonhie_survey12m_vars.dta 
 	Rscript $(APP_DIR)/OHIE/prepare_OHIE_data.R --git_repo_loc=$(GIT_REPO_LOC)
 $(OHIE_DATA): $(OHIE_CSV)
 	Rscript $(APP_DIR)/OHIE/OHIE-sensitivity-table-9-with-IV.R --git_repo_loc=$(GIT_REPO_LOC)

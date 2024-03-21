@@ -28,7 +28,6 @@ if (!dir.exists(git_repo_loc)) {
 }
 
 base_dir <- git_repo_loc
-#base_dir <- "/Users/rachaelmeager/AdversarialInfluenceWorkbench"
 
 # now read data
 library(foreign)
@@ -37,6 +36,9 @@ library(tidyverse)
 
 
 filepath_data <- file.path(base_dir, "examples/cash_transfers/angelucci-digiorgi-data-code/table1.dta")
+if (!file.exists(filepath_data)) {
+  stop(sprintf("%s does not exist", filepath_data))
+}
 raw_data <- read.dta(filepath_data)
 
 ### CHECK THAT WE CAN REPLICATE THE PAPER
