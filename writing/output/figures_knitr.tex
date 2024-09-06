@@ -1,0 +1,378 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Do not edit the TeX file your work
+% will be overwritten.  Edit the RnW
+% file instead.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\newcommand{\DefineMacros}{
+\newcommand{\SimNumObs}{5,000}
+\newcommand{\SimTrueTheta}{0.5}
+\newcommand{\SimAccNumObs}{5,000}
+\newcommand{\SimAccSigx}{2}
+\newcommand{\SimAccSigeps}{1}
+\newcommand{\SimAccPercentMax}{10}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+% Tables
+
+\newcommand{\CashTransfersResultsTable}{
+% \input{figures/cash_transfers_re_run_table.tex}
+
+
+\begin{table}\scriptsize 
+\begin{tabular}{|ccccc|}
+\toprule
+Study case & Original  & Target  & Estimate   & Observations \\
+  & estimate  & change  & after refit  & dropped \\
+\midrule
+\midrule
+& &  $\pm$ &  \textbf{-0.656 (3.745)} &  252 = 2.30\%\\
+Poor, period 8  &  17.312 (4.576)* &  ${}^*$ &  \textbf{7.284 (4.087)} &  83 = 0.76\%\\
+& &  $\pm^*$ &  \textbf{-7.212 (3.443)*} &  464 = 4.24\%\\
+\midrule
+& &  $\pm$ &  \textbf{-1.377 (4.406)} &  345 = 3.58\%\\
+Poor, period 9  &  27.924 (5.770)* &  ${}^*$ &  \textbf{7.077 (4.555)} &  146 = 1.52\%\\
+& &  $\pm^*$ &  \textbf{-8.951 (4.251)*} &  588 = 6.11\%\\
+\midrule
+& &  $\pm$ &  \textbf{-2.559 (3.541)} &  697 = 6.63\%\\
+Poor, period 10  &  33.861 (4.468)* &  ${}^*$ &  \textbf{4.806 (3.684)} &  435 = 4.14\%\\
+& &  $\pm^*$ &  \textbf{-9.416 (3.296)*} &  986 = 9.37\%\\
+\midrule
+& &  $\pm$ &  \textbf{0.260 (6.410)} &  5 = 0.11\%\\
+Non-poor, period 8  &  -5.444 (7.133) &  ${}^*$ &  -12.845 (6.635) &  16 = 0.35\%\\
+& &  $\pm^*$ &  9.670 (5.573) &  24 = 0.52\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.365 (7.542)} &  21 = 0.55\%\\
+Non-poor, period 9  &  22.852 (10.000)* &  ${}^*$ &  \textbf{16.506 (9.114)} &  3 = 0.08\%\\
+& &  $\pm^*$ &  -11.733 (7.113) &  53 = 1.38\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.573 (6.750)} &  30 = 0.70\%\\
+Non-poor, period 10  &  21.493 (9.405)* &  ${}^*$ &  \textbf{16.262 (8.927)} &  3 = 0.07\%\\
+& &  $\pm^*$ &  -10.845 (6.467) &  92 = 2.16\%\\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{ Cash transfers results for various periods and treatment groups. The ``Refit estimate'' column shows the result of re-fitting the model removing the Approximate Most Influential Set. Stars indicate significance at the 5\% level.  A targeted sign change is denoted by $\pm$, a significance change by ${}^*$, and a statistically significant sign change by $\pm^*$.  Refits that achieved the desired change are bolded. }
+\label{table:cash_transfers_re_run_table}
+\end{table}
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%
+% OHIE
+
+\newcommand{\OHIEResultsTable}{
+% \input{figures/OHIE_table_9_IV_re_run_table.tex}
+
+
+\begin{table}\scriptsize 
+\begin{tabular}{|ccccc|}
+\toprule
+Study case & Original  & Target  & Estimate   & Observations \\
+  & estimate  & change  & after refit  & dropped \\
+\midrule
+\midrule
+& &  $\pm$ &  0.136 (0.026)* &  229 = 0.98\%\\
+Health genflip  &  0.133 (0.026)* &  ${}^*$ &  0.138 (0.026)* &  132 = 0.57\%\\
+& &  $\pm^*$ &  0.135 (0.026)* &  336 = 1.44\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.003 (0.015)} &  155 = 0.66\%\\
+Health notpoor  &  0.099 (0.018)* &  ${}^*$ &  \textbf{0.027 (0.016)} &  100 = 0.43\%\\
+& &  $\pm^*$ &  \textbf{-0.030 (0.015)*} &  219 = 0.94\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.006 (0.022)} &  197 = 0.84\%\\
+Health change flip  &  0.113 (0.023)* &  ${}^*$ &  \textbf{0.039 (0.022)} &  106 = 0.45\%\\
+& &  $\pm^*$ &  \textbf{-0.049 (0.022)*} &  291 = 1.24\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.023 (0.535)} &  73 = 0.33\%\\
+Not bad days total  &  1.317 (0.563)* &  ${}^*$ &  \textbf{1.078 (0.558)} &  10 = 0.05\%\\
+& &  $\pm^*$ &  -1.009 (0.521) &  144 = 0.66\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.040 (0.577)} &  87 = 0.41\%\\
+Not bad days physical  &  1.585 (0.606)* &  ${}^*$ &  \textbf{1.131 (0.597)} &  20 = 0.09\%\\
+& &  $\pm^*$ &  \textbf{-1.141 (0.566)*} &  164 = 0.77\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.062 (0.607)} &  123 = 0.57\%\\
+Not bad days mental  &  2.082 (0.640)* &  ${}^*$ &  \textbf{1.171 (0.625)} &  42 = 0.19\%\\
+& &  $\pm^*$ &  \textbf{-1.215 (0.594)*} &  213 = 0.99\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.005 (0.024)} &  123 = 0.53\%\\
+Nodep Screen  &  0.078 (0.025)* &  ${}^*$ &  \textbf{0.046 (0.024)} &  42 = 0.18\%\\
+& &  $\pm^*$ &  \textbf{-0.050 (0.023)*} &  220 = 0.95\%\\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{ Medicaid profit results with IV for a range of outcome variables.  The ``Refit estimate'' column shows the result of re-fitting the model removing the Approximate Most Influential Set. Stars indicate significance at the 5\% level.  A targeted sign change is denoted by $\pm$, a significance change by ${}^*$, and a statistically significant sign change by $\pm^*$.  Refits that achieved the desired change are bolded. }
+\label{table:ohie_profit_results_iv}
+\end{table}
+
+
+
+\begin{table}\scriptsize 
+\begin{tabular}{|ccccc|}
+\toprule
+Study case & Original  & Target  & Estimate   & Observations \\
+  & estimate  & change  & after refit  & dropped \\
+\midrule
+\midrule
+& &  $\pm$ &  \textbf{-0.004 (0.008)} &  286 = 1.22\%\\
+Health genflip  &  0.039 (0.008)* &  ${}^*$ &  \textbf{0.013 (0.008)} &  163 = 0.70\%\\
+& &  $\pm^*$ &  \textbf{-0.021 (0.008)*} &  422 = 1.81\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.001 (0.005)} &  156 = 0.67\%\\
+Health notpoor  &  0.029 (0.005)* &  ${}^*$ &  \textbf{0.008 (0.005)} &  101 = 0.43\%\\
+& &  $\pm^*$ &  \textbf{-0.009 (0.004)*} &  224 = 0.96\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.002 (0.006)} &  198 = 0.85\%\\
+Health change flip  &  0.033 (0.007)* &  ${}^*$ &  \textbf{0.011 (0.007)} &  106 = 0.45\%\\
+& &  $\pm^*$ &  \textbf{-0.015 (0.006)*} &  292 = 1.25\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.013 (0.157)} &  74 = 0.34\%\\
+Not bad days total  &  0.381 (0.162)* &  ${}^*$ &  \textbf{0.306 (0.161)} &  11 = 0.05\%\\
+& &  $\pm^*$ &  \textbf{-0.309 (0.153)*} &  147 = 0.67\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.017 (0.169)} &  88 = 0.41\%\\
+Not bad days physical  &  0.459 (0.175)* &  ${}^*$ &  \textbf{0.328 (0.172)} &  20 = 0.09\%\\
+& &  $\pm^*$ &  \textbf{-0.344 (0.165)*} &  166 = 0.78\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.027 (0.178)} &  124 = 0.57\%\\
+Not bad days mental  &  0.603 (0.184)* &  ${}^*$ &  \textbf{0.340 (0.181)} &  42 = 0.19\%\\
+& &  $\pm^*$ &  \textbf{-0.381 (0.175)*} &  216 = 1.00\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.001 (0.007)} &  123 = 0.53\%\\
+Nodep Screen  &  0.023 (0.007)* &  ${}^*$ &  \textbf{0.013 (0.007)} &  43 = 0.19\%\\
+& &  $\pm^*$ &  \textbf{-0.015 (0.007)*} &  225 = 0.97\%\\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{ Medicaid profit results with OLS for a range of outcome variables.  All outcomes are twelve-month outcomes.  The ``Refit estimate'' column shows the result of re-fitting the model removing the Approximate Most Influential Set. Stars indicate significance at the 5\% level.  A targeted sign change is denoted by $\pm$, a significance change by ${}^*$, and a statistically significant sign change by $\pm^*$.  Refits that achieved the desired change are bolded. }
+\label{table:ohie_profit_results_reg}
+\end{table}
+
+
+}
+
+
+%%%%%%%%%%%%%%%%%%%
+% Microcredit
+
+\newcommand{\MicrocreditProfitResultsTable}{
+% \input{figures/microcredit_profit_re_run_table.tex}
+
+
+\begin{table}\scriptsize 
+\begin{tabular}{|ccccc|}
+\toprule
+Study case & Original  & Target  & Estimate   & Observations \\
+  & estimate  & change  & after refit  & dropped \\
+\midrule
+\midrule
+& &  $\pm$ &  \textbf{-2.226 (15.628)} &  14 = 1.17\%\\
+Bosnia  &  37.534 (19.780) &  ${}^*$ &  \textbf{43.732 (18.889)*} &  1 = 0.08\%\\
+& &  $\pm^*$ &  \textbf{-34.929 (14.323)*} &  40 = 3.35\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.053 (2.513)} &  1 = 0.03\%\\
+Ethiopia  &  7.289 (7.893) &  ${}^*$ &  \textbf{15.356 (7.763)*} &  45 = 1.45\%\\
+& &  $\pm^*$ &  \textbf{-8.755 (1.852)*} &  66 = 2.12\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.501 (8.221)} &  6 = 0.09\%\\
+India  &  16.722 (11.830) &  ${}^*$ &  \textbf{22.895 (10.267)*} &  1 = 0.01\%\\
+& &  $\pm^*$ &  \textbf{-16.638 (7.537)*} &  32 = 0.47\%\\
+\midrule
+& &  $\pm$ &  \textbf{0.398 (3.194)} &  1 = 0.01\%\\
+Mexico  &  -4.549 (5.879) &  ${}^*$ &  \textbf{-10.962 (5.565)*} &  14 = 0.08\%\\
+& &  $\pm^*$ &  \textbf{7.030 (2.549)*} &  15 = 0.09\%\\
+\midrule
+& &  $\pm$ &  \textbf{0.021 (0.184)} &  16 = 1.66\%\\
+Mongolia  &  -0.341 (0.223) &  ${}^*$ &  \textbf{-0.436 (0.220)*} &  2 = 0.21\%\\
+& &  $\pm^*$ &  \textbf{0.361 (0.147)*} &  38 = 3.95\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.569 (9.920)} &  11 = 0.20\%\\
+Morocco  &  17.544 (11.401) &  ${}^*$ &  \textbf{21.720 (11.003)*} &  2 = 0.04\%\\
+& &  $\pm^*$ &  \textbf{-18.847 (9.007)*} &  30 = 0.55\%\\
+\midrule
+& &  $\pm$ &  \textbf{-4.014 (57.204)} &  9 = 0.81\%\\
+Philippines  &  66.564 (78.127) &  ${}^*$ &  \textbf{138.929 (66.880)*} &  4 = 0.36\%\\
+& &  $\pm^*$ &  \textbf{-122.494 (49.409)*} &  58 = 5.21\%\\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{ Microcredit regressions for the profit outcome. The ``Refit estimate'' column shows the result of re-fitting the model removing the Approximate Most Influential Set. Stars indicate significance at the 5\% level.  A targeted sign change is denoted by $\pm$, a significance change by ${}^*$, and a statistically significant sign change by $\pm^*$.  Refits that achieved the desired change are bolded. }
+\label{table:mc_profit_results}
+\end{table}
+
+
+}
+
+
+\newcommand{\MicrocreditTemptationResultsTable}{
+% \input{figures/microcredit_profit_re_run_table.tex}
+
+
+\begin{table}\scriptsize 
+\begin{tabular}{|ccccc|}
+\toprule
+Study case & Original  & Target  & Estimate   & Observations \\
+  & estimate  & change  & after refit  & dropped \\
+\midrule
+\midrule
+& &  $\pm$ &  \textbf{0.395 (2.135)} &  10 = 1.00\%\\
+Bosnia  &  -5.803 (2.819)* &  ${}^*$ &  \textbf{-4.870 (2.693)} &  1 = 0.10\%\\
+& &  $\pm^*$ &  \textbf{5.130 (1.978)*} &  33 = 3.31\%\\
+\midrule
+& &  $\pm$ &  \textbf{0.035 (0.506)} &  41 = 0.60\%\\
+India  &  -1.643 (0.576)* &  ${}^*$ &  -1.051 (0.536)* &  8 = 0.12\%\\
+& &  $\pm^*$ &  \textbf{1.059 (0.487)*} &  85 = 1.25\%\\
+\midrule
+& &  $\pm$ &  \textbf{0.000 (0.091)} &  12 = 0.07\%\\
+Mexico  &  -0.082 (0.094) &  ${}^*$ &  \textbf{-0.180 (0.091)*} &  14 = 0.09\%\\
+& &  $\pm^*$ &  \textbf{0.176 (0.087)*} &  55 = 0.33\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.033 (0.973)} &  3 = 0.31\%\\
+Mongolia  &  1.523 (2.103) &  ${}^*$ &  \textbf{2.717 (1.027)*} &  10 = 1.04\%\\
+& &  $\pm^*$ &  \textbf{-2.623 (0.689)*} &  45 = 4.68\%\\
+\midrule
+& &  $\pm$ &  \textbf{0.047 (0.669)} &  3 = 0.05\%\\
+Morocco  &  -0.420 (0.723) &  ${}^*$ &  \textbf{-1.351 (0.667)*} &  14 = 0.26\%\\
+& &  $\pm^*$ &  \textbf{1.252 (0.602)*} &  23 = 0.42\%\\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{ Microcredit regressions for the temptation outcome. The ``Refit estimate'' column shows the result of re-fitting the model removing the Approximate Most Influential Set. Stars indicate significance at the 5\% level.  A targeted sign change is denoted by $\pm$, a significance change by ${}^*$, and a statistically significant sign change by $\pm^*$.  Refits that achieved the desired change are bolded. }
+\label{table:mc_temptation_results}
+\end{table}
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%
+% Microcredit mixture
+
+\newcommand{\MicrocreditMixtureResultsTable}{
+
+
+\begin{table}\scriptsize 
+\begin{tabular}{|ccccc|}
+\toprule
+Model parameter & Original  & Target  & Estimate   & Observations \\
+  & estimate  & change  & after refit  & dropped \\
+\midrule
+\midrule
+& &  $\pm$ &  \textbf{-0.036 (0.082)} &  28 = 0.08\%\\
+$\tau_{-}$  &  0.094 (0.068) &  ${}^*$ &  \textbf{0.135 (0.068)*} &  13 = 0.04\%\\
+& &  $\pm^*$ &  \textbf{-0.187 (0.093)*} &  95 = 0.27\%\\
+\midrule
+& &  $\pm$ &  \textbf{-0.025 (0.053)} &  73 = 0.21\%\\
+$\tau_{+}$  &  0.079 (0.034)* &  ${}^*$ &  \textbf{0.065 (0.036)} &  7 = 0.02\%\\
+& &  $\pm^*$ &  -0.105 (0.061) &  167 = 0.47\%\\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{ Microcredit mixture results for a selected set of model parameters. Standard errors and ``significance'' are based on the estimated 95\% posterior credible intervals. The ``Refit estimate'' column shows the result of re-fitting the model removing the Approximate Most Influential Set. Stars indicate significance at the 5\% level.  A targeted sign change is denoted by $\pm$, a significance change by ${}^*$, and a statistically significant sign change by $\pm^*$.  Refits that achieved the desired change are bolded. }
+\label{table:mcmix_re_run_table}
+\end{table}
+
+
+}
+
+\newcommand{\MicrocreditMixtureSdResultsTable}{
+
+
+\begin{table}\scriptsize 
+\begin{tabular}{|cccccc|}
+\toprule
+Model parameter & Original  & Change  & Estimate   & Prediction  & Observations \\
+  & estimate  & type  & after refit  &   & dropped \\
+\midrule
+\midrule
+$\log \sigma_{\tau_{-}}$  &  -2.350 &  Increase &  0.030 &  -0.915 &  177 = 0.50\%\\
+& &  Decrease &  -0.237 &  -4.047 &  177 = 0.50\%\\
+\midrule
+$\log \sigma_{\tau_{+}}$  &  -3.009 &  Increase &  -1.089 &  -0.660 &  177 = 0.50\%\\
+& &  Decrease &  -1.638 &  -5.307 &  177 = 0.50\%\\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{ Results for the log posterior standard deviation estimates of the effect size distribution in the microcredit mixture model.  Sign and significance are not meaningful for posterior standard deviations, so we drop 0.5\% of datapoints to attempt to produce large positive and negative changes.  The ``Refit estimate'' column shows the result of re-fitting the model removing Approximate Most Influential Set.  The ``Prediction'' column shows the predicted change under the same perturbation.   }
+\label{table:mcmix_sd_re_run_table}
+\end{table}
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+% Graphs
+
+%%%%%%%%%%%%%%%%%%%
+% Simulations
+
+%
+% \newcommand{\SimGridNormalGraph}{
+% <<sim_graphics_cap2>>=
+% figcap <- paste0(
+%     "Simulation results for linear regression at differing scales of $\\sigma_x$ ",
+%     "and $\\sigma_\\epsilon$. A darker red colour indicates a highly sensitive ",
+%     "analysis, in which only a small proportion of the sample needs to be ",
+%     "removed to effect a change of sign. A lighter red colour indicates ",
+%     "greater robustness. The grey areas indicate ",
+%     "$\\amip{\\alpha} = \\na$, a failure of the linear approximation to ",
+%     "locate any way to effect these changes.")
+% SetImageSize(aspect_ratio=base_aspect_ratio / 2.2)
+% @
+% <<sim-grid-normal, cache=sim_cache, fig.show='hold', fig.cap=figcap>>=
+% source("figures_knitr/simulations/grid_results.R",
+%        echo=knitr_debug, print.eval=TRUE)
+% SetFullImageSize()
+% @
+% }
+
+
+%
+%
+% \newcommand{\SimAccuracyNormalGraph}{
+% <<sim_graphics_cap3>>=
+% figcap <- paste0(
+%     "Simulation results for linear regression at differing scales of $\\sigma_x$ ",
+%     "and $\\sigma_\\epsilon$. A darker red colour indicates a highly sensitive ",
+%     "analysis, in which only a small proportion of the sample needs to be ",
+%     "removed to effect a change of sign. A lighter red colour indicates ",
+%     "greater robustness. The grey areas indicate ",
+%     "$\\amip{\\alpha} = \\na$, a failure of the linear approximation to ",
+%     "locate any way to effect these changes.")
+% SetImageSize(aspect_ratio=base_aspect_ratio / 2.2)
+% @
+% <<sim-acc-normal, cache=sim_cache, fig.show='hold', fig.cap=figcap>>=
+% source("figures_knitr/simulations/accuracy_results.R",
+%        echo=knitr_debug, print.eval=TRUE)
+% SetFullImageSize()
+% @
+% }
+
+
+\newcommand{\SimCombNormalGraph}{
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}[!h]
+
+{\centering \includegraphics[width=0.98\linewidth,height=0.524\linewidth]{figure/sim-comb-normal-1} 
+
+}
+
+\caption{Simulation results for univariate linear regression with $N = \SimAccNumObs$ observations.  \textbf{Left panel:}  The approximate perturbation inducing proportion at differing values of $\sigma_x$ and $\sigma_\varepsilon$. Red colors indicate datasets whose sign can be predicted to change when dropping less than 1\% of datapoints. The grey areas indicate $\amip{\alpha} = \na$, a failure of the linear approximation to locate any way to change the sign.  \textbf{Right panel:}  The actual change, linear approximation to the change, and approximation error for $\sigma_x = \SimAccSigx$ and $\sigma_\varepsilon = \SimAccSigeps$.}\label{fig:sim-comb-normal}
+\end{figure}
+
+\end{knitrout}
+}

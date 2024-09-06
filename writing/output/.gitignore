@@ -7,3 +7,6 @@ cache/*
 *.log
 *.brf
 *.cfg
+figure/**
+*.bbl
+*.pdf
