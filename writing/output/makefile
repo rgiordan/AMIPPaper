@@ -138,7 +138,6 @@ clean_ohie_data:
 	rm -f $(OHIE_DATA)
 
 
-
 # Microcredit
 
 MC_BASE_RDATA := $(EXAMPLES_DIR)/microcredit/microcredit_project_data.RData
@@ -276,6 +275,33 @@ clean_mcmix_data:
 	rm -f $(MCMIX_REFIT_DATA)
 	echo Not removing very time-consuming MCMIX analyses \(initial fit and refits\).
 	echo To remove the initial MCMIX fit and refits, run 'make clean_expensive_mcmix_data'
+
+
+# Copies analysis files into a single directory which can be zipped up and saved on 
+# a large storage device and then reloaded into the paper directory structure.
+ARCHIVE_DIR = $(PAPER_DIR)/data_archive
+.PHONY: archive_data
+archive_mcmix_data:
+	cp $(MCMIX_INITIAL_FIT) $(ARCHIVE_DIR)/
+	cp $(MCMIX_DIR)/python/reweightings/amis_weight_draws$(MCMIX_DRAWS)_*smuberFalse.npz $(ARCHIVE_DIR)/
+	cp $(MCMIX_DIR)/python/reweightings/refit_*_$(MCMIX_DRAWS)draws.npz $(ARCHIVE_DIR)/
+	cp $(MCMIX_DATA) $(ARCHIVE_DIR)/
+	cp $(MCMIX_SUMMARY_DATA) $(ARCHIVE_DIR)/
+	cp $(MCMIX_SENS) $(ARCHIVE_DIR)/
+	cp $(MCMIX_REFIT_DATA) $(ARCHIVE_DIR)/
+	cp $(MCMIX_DATA) $(ARCHIVE_DIR)/
+
+.PHONY: restore_mcmix_data
+restore_mcmix_data:
+	cp $(ARCHIVE_DIR)/$(notdir $(MCMIX_INITIAL_FIT)) $(MCMIX_INITIAL_FIT)
+	cp $(ARCHIVE_DIR)/amis_weight_draws$(MCMIX_DRAWS)_*smuberFalse.npz $(MCMIX_DIR)/python/reweightings/
+	cp $(ARCHIVE_DIR)/refit_*_$(MCMIX_DRAWS)draws.npz $(MCMIX_DIR)/python/reweightings/
+	cp $(ARCHIVE_DIR)/$(notdir $(MCMIX_DATA)) $(MCMIX_DATA)
+	cp $(ARCHIVE_DIR)/$(notdir $(MCMIX_SUMMARY_DATA)) $(MCMIX_SUMMARY_DATA)
+	cp $(ARCHIVE_DIR)/$(notdir $(MCMIX_SENS)) $(MCMIX_SENS)
+	cp $(ARCHIVE_DIR)/$(notdir $(MCMIX_REFIT_DATA)) $(MCMIX_REFIT_DATA)
+
+
 
 
 #~/Documents/git_repos/AdversarialInfluenceWorkbench/examples/
