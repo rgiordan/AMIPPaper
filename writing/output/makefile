@@ -280,7 +280,7 @@ clean_mcmix_data:
 # Copies analysis files into a single directory which can be zipped up and saved on 
 # a large storage device and then reloaded into the paper directory structure.
 ARCHIVE_DIR = $(PAPER_DIR)/data_archive
-.PHONY: archive_data
+.PHONY: archive_mcmix_data
 archive_mcmix_data:
 	cp $(MCMIX_INITIAL_FIT) $(ARCHIVE_DIR)/
 	cp $(MCMIX_DIR)/python/reweightings/amis_weight_draws$(MCMIX_DRAWS)_*smuberFalse.npz $(ARCHIVE_DIR)/
