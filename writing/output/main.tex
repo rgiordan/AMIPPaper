@@ -2,10 +2,10 @@
 % Headers
 
 
-\documentclass[webpdf,contemporary,small,namedate]{oup-authoring-template}% JRSSB
+%\documentclass[webpdf,contemporary,small,namedate]{oup-authoring-template}% JRSSB
 %\documentclass[unnumsec,webpdf,contemporary,small,namedate]{oup-authoring-template}% JRSSB
 %\documentclass[namedate,webpdf,traditional,small]{oup-authoring-template}
-%\documentclass[english,12pt]{article}\usepackage{lmodern} % For arxiv
+\documentclass[english,12pt]{article}\usepackage{lmodern} % For arxiv
 
 
 %\usepackage[colorinlistoftodos,prependcaption,textsize=tiny,textwidth=0.8in]{todonotes}
@@ -14,8 +14,8 @@
 \usepackage{etoolbox}
 \newbool{arxiv}
 
-\boolfalse{arxiv} % For journal submission
-%\booltrue{arxiv}   % For arxiv
+%\boolfalse{arxiv} % For journal submission
+\booltrue{arxiv}   % For arxiv
 
 \usepackage{xr-hyper}
 
@@ -32,7 +32,8 @@
     % line numbers for easy editing
     \usepackage{lineno}
     \usepackage{setspace}
-    \onehalfspacing
+    %\onehalfspacing
+    \doublespacing
     \makeatother
     \usepackage[unicode=true, pdfusetitle,
     bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
